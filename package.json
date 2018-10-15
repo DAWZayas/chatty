@@ -12,7 +12,11 @@
   "dependencies": {
     "apollo-server": "^2.1.0",
     "faker": "^4.1.0",
-    "graphql": "^14.0.2"
+    "graphql": "^14.0.2",
+    "graphql-date": "^1.0.3",
+    "ramda": "^0.25.0",
+    "sequelize": "^4.39.0",
+    "sqlite3": "^4.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
