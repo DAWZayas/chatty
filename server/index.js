@@ -13,7 +13,7 @@ const startServer = async () => {
 };
 
 const init = async () => {
-  await mockDB();
+  await mockDB({ populating: true, force: true });
   startServer();
 };
 
