@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start-emulator": "$ANDROID_HOME/emulator/emulator @Nexus_6_API_27",
     "test": "jest"
   },
   "dependencies": {
@@ -13,17 +14,24 @@
     "apollo-link-error": "^1.1.1",
     "apollo-link-http": "^1.5.5",
     "apollo-link-redux": "^0.2.1",
+    "date-fns": "^1.29.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
+    "prop-types": "^15.6.2",
+    "query-string": "^6.2.0",
+    "ramda": "^0.25.0",
+    "randomcolor": "^0.5.3",
     "react": "16.5.0",
     "react-apollo": "^2.2.4",
     "react-native": "0.57.2",
+    "react-navigation": "2.18",
+    "react-navigation-redux-helpers": "^2.0.6",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5"
   },
   "devDependencies": {
-    "babel-jest": "23.6.0",    
+    "babel-jest": "23.6.0",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.48.0",
     "react-test-renderer": "16.5.0"

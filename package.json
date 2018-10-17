@@ -6,8 +6,7 @@
   "author": "surtich <surtich@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --watch server --watch package.json server/index.js --exec babel-node --presets es2015,stage-2",
-    "start-emulator": "$ANDROID_HOME/emulator/emulator @Nexus_6_API_27"
+    "start": "nodemon --watch server --watch package.json server/index.js --exec babel-node --presets es2015,stage-2"
   },
   "dependencies": {
     "apollo-server": "^2.1.0",
