@@ -33,14 +33,15 @@ const fakeData = () => R.times(
   }),
   100,
 );
-const Group = ({ group: { id, name } }) => (
-  <TouchableHighlight key={id}>
+const Group = ({ group: { id, name }, goToMessages }) => (
+  <TouchableHighlight key={id} onPress={goToMessages}>
     <View style={styles.groupContainer}>
-      <Text style={styles.groupName}>{`${name}`}</Text>
+      <Text style={styles.groupName}>{name}</Text>
     </View>
   </TouchableHighlight>
 );
 Group.propTypes = {
+  goToMessages: PropTypes.func.isRequired,
   group: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -53,7 +54,14 @@ class Groups extends Component {
 
   keyExtractor = item => item.id.toString();
 
-  renderItem = ({ item }) => <Group group={item} />;
+  goToMessages = group => () => {
+    const {
+      navigation: { navigate },
+    } = this.props;
+    navigate('Messages', { groupId: group.id, title: group.name });
+  };
+
+  renderItem = ({ item }) => <Group group={item} goToMessages={this.goToMessages(item)} />;
 
   render() {
     // render list of groups for user
@@ -64,4 +72,11 @@ class Groups extends Component {
     );
   }
 }
+
+Groups.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }),
+};
+
 export default Groups;
