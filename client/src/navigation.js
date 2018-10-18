@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
-  StackActions,
-  NavigationActions,
-  createStackNavigator,
   createMaterialTopTabNavigator,
+  createStackNavigator,
+  NavigationActions,
+  StackActions,
 } from 'react-navigation';
 import {
   reduxifyNavigator,
   createReactNavigationReduxMiddleware,
 } from 'react-navigation-redux-helpers';
-import { Text, View, StyleSheet } from 'react-native';
+import {
+  BackHandler, Text, View, StyleSheet,
+} from 'react-native';
 import { connect } from 'react-redux';
 
 import Groups from './screens/groups.screen';
@@ -41,7 +43,9 @@ const MainScreenNavigator = createMaterialTopTabNavigator(
 const AppNavigator = createStackNavigator(
   {
     Main: { screen: MainScreenNavigator },
-    Messages: { screen: Messages },
+    Messages: {
+      screen: Messages,
+    },
   },
   {
     mode: 'modal',
@@ -73,5 +77,26 @@ const App = reduxifyNavigator(AppNavigator, 'root');
 const mapStateToProps = state => ({
   state: state.nav,
 });
-const AppWithNavigationState = connect(mapStateToProps)(App);
+
+class AppWithBackPress extends Component {
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress = () => {
+    const { dispatch } = this.props;
+    dispatch(NavigationActions.back());
+    return true;
+  };
+
+  render() {
+    return <App {...this.props} />;
+  }
+}
+
+const AppWithNavigationState = connect(mapStateToProps)(AppWithBackPress);
 export default AppWithNavigationState;

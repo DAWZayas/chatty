@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
-import {
-  ActivityIndicator, FlatList, StyleSheet, View,
-} from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
 import { graphql, compose } from 'react-apollo';
 
 import Message from '../components/message.component';
 import GROUP_QUERY from '../graphql/group.query';
+import withLoading from '../components/withLoading';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +14,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#e5ddd5',
     flex: 1,
     flexDirection: 'column',
-  },
-  loading: {
-    justifyContent: 'center',
   },
 });
 
@@ -74,16 +70,7 @@ class Messages extends Component {
   };
 
   render() {
-    const { loading, group } = this.props;
-    // render loading placeholder while we fetch messages
-    if (loading && !group) {
-      return (
-        <View style={[styles.loading, styles.container]}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
-    // render list of messages for group
+    const { group } = this.props;
     return (
       <View style={styles.container}>
         <FlatList
@@ -101,7 +88,6 @@ Messages.propTypes = {
     messages: PropTypes.array,
     users: PropTypes.array,
   }),
-  loading: PropTypes.bool,
 };
 const groupQuery = graphql(GROUP_QUERY, {
   options: ownProps => ({
@@ -114,4 +100,7 @@ const groupQuery = graphql(GROUP_QUERY, {
     group,
   }),
 });
-export default compose(groupQuery)(Messages);
+export default compose(
+  groupQuery,
+  withLoading,
+)(Messages);
