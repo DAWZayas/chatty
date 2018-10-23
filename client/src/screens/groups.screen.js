@@ -4,7 +4,7 @@ import {
   FlatList, StyleSheet, Text, TouchableHighlight, View,
 } from 'react-native';
 
-import { graphql, compose } from 'react-apollo';
+import { Query } from 'react-apollo';
 
 import { USER_QUERY } from '../graphql/user.query';
 import withLoading from '../components/withLoading';
@@ -62,6 +62,10 @@ class Groups extends Component {
   render() {
     const { user } = this.props;
 
+    if (!user) {
+      return null;
+    }
+
     return (
       <View style={styles.container}>
         <FlatList
@@ -90,15 +94,10 @@ Groups.propTypes = {
   }),
 };
 
-const userQuery = graphql(USER_QUERY, {
-  options: () => ({ variables: { id: 1 } }), // fake the user for now
-  props: ({ data: { loading, user } }) => ({
-    loading,
-    user,
-  }),
-});
+const UserQuery = props => (
+  <Query query={USER_QUERY} variables={{ id: 1 }}>
+    {({ data: { loading, user } }) => withLoading(Groups)({ ...props, loading, user })}
+  </Query>
+);
 
-export default compose(
-  userQuery,
-  withLoading,
-)(Groups);
+export default UserQuery;
