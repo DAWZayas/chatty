@@ -37,8 +37,16 @@ export const typeDefs = gql`
     # Return a group by its id
     group(id: Int!): Group
   }
+  type Mutation {
+    # create a new message
+    # text is the message text
+    # userId is the id of the user sending the message
+    # groupId is the id of the group receiving the message
+    createMessage(text: String!, userId: Int!, groupId: Int!): Message
+  }
   schema {
     query: Query
+    mutation: Mutation
   }
 `;
 
