@@ -5,6 +5,7 @@ import randomColor from 'randomcolor';
 import { graphql, compose } from 'react-apollo';
 
 import Message from '../components/message.component';
+import MessageInput from '../components/message-input.component';
 import GROUP_QUERY from '../graphql/group.query';
 import withLoading from '../components/withLoading';
 
@@ -69,6 +70,11 @@ class Messages extends Component {
     );
   };
 
+  send = (text) => {
+    // TODO: send the message
+    console.log(`sending message: ${text}`);
+  };
+
   render() {
     const { group } = this.props;
     return (
@@ -79,6 +85,7 @@ class Messages extends Component {
           renderItem={this.renderItem}
           ListEmptyComponent={<View />}
         />
+        <MessageInput send={this.send} />
       </View>
     );
   }
