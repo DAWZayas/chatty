@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 const db = new Sequelize('chatty', null, null, {
   dialect: 'sqlite',
   storage: './chatty.sqlite',
-  logging: false, // mark this true if you want to see logs
+  logging: true, // mark this true if you want to see logs
 });
 // define groups
 const GroupModel = db.define('group', {
