@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, TextInput, View } from 'react-native';
+import { Formik } from 'formik';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
@@ -23,8 +24,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: 'black',
     height: 32,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    padding: 8,
   },
   sendButtonContainer: {
     paddingRight: 12,
@@ -50,38 +50,33 @@ const sendButton = send => (
     style={styles.sendButton}
   />
 );
-class MessageInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
 
-  handleSend = () => {
-    const { text } = this.state;
-    const { send } = this.props;
-    send(text);
-    this.textInput.clear();
-    this.textInput.blur();
-  };
-
-  render() {
-    return (
+const MessageInput = ({ send }) => (
+  <Formik
+    initialValues={{ messageText: '' }}
+    onSubmit={({ messageText }, { resetForm }) => {
+      send(messageText);
+      resetForm({});
+    }}
+  >
+    {({
+      handleBlur, handleChange, handleSubmit, values,
+    }) => (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
           <TextInput
-            ref={(ref) => {
-              this.textInput = ref;
-            }}
-            onChangeText={text => this.setState({ text })}
+            onChangeText={handleChange('messageText')}
+            onBlur={handleBlur('messageText')}
+            value={values.messageText}
             style={styles.input}
             placeholder="Type your message here!"
           />
         </View>
-        <View style={styles.sendButtonContainer}>{sendButton(this.handleSend)}</View>
+        <View style={styles.sendButtonContainer}>{sendButton(handleSubmit)}</View>
       </View>
-    );
-  }
-}
+    )}
+  </Formik>
+);
 MessageInput.propTypes = {
   send: PropTypes.func.isRequired,
 };
