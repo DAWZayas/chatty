@@ -127,12 +127,32 @@ const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
   props: ({ mutate }) => ({
     createMessage: message => mutate({
       variables: { message },
+      update: (store, { data: { createMessage } }) => {
+        // Read the data from our cache for this query.
+        const groupData = store.readQuery({
+          query: GROUP_QUERY,
+          variables: {
+            groupId: message.groupId,
+          },
+        });
+
+          // Add our message from the mutation to the end.
+        groupData.group.messages.unshift(createMessage);
+        // Write our data back to the cache.
+        store.writeQuery({
+          query: GROUP_QUERY,
+          variables: {
+            groupId: message.groupId,
+          },
+          data: groupData,
+        });
+      },
     }),
   }),
 });
 
 export default compose(
   groupQuery,
-  withLoading,
   createMessageMutation,
+  withLoading,
 )(Messages);
