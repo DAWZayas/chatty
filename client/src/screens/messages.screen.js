@@ -73,8 +73,9 @@ class Messages extends Component {
   };
 
   send = (text) => {
-    this.props.createMessage({
-      groupId: this.props.navigation.state.params.groupId,
+    const { createMessage, navigation } = this.props;
+    createMessage({
+      groupId: navigation.state.params.groupId,
       userId: 1, // faking the user for now
       text,
     });
