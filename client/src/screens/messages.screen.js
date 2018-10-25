@@ -127,6 +127,24 @@ const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
   props: ({ mutate }) => ({
     createMessage: message => mutate({
       variables: { message },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        createMessage: {
+          __typename: 'Message',
+          id: -1, // don't know id yet, but it doesn't matter
+          text: message.text, // we know what the text will be
+          createdAt: new Date().toISOString(), // the time is now!
+          from: {
+            __typename: 'User',
+            id: 1, // still faking the user
+            username: 'Justyn.Kautzer', // still faking the user
+          },
+          to: {
+            __typename: 'Group',
+            id: message.groupId,
+          },
+        },
+      },
       update: (store, { data: { createMessage } }) => {
         // Read the data from our cache for this query.
         const groupData = store.readQuery({
