@@ -30,6 +30,46 @@ export const resolvers = {
         groupId,
       });
     },
+    async createGroup(
+      _,
+      {
+        group: { name, userIds, userId },
+      },
+    ) {
+      const user = await User.findOne({ where: { id: userId } });
+      const friends = await user.getFriends({ where: { id: { $in: userIds } } });
+      const group = await Group.create({
+        name,
+        users: [user, ...friends],
+      });
+      await group.addUsers([user, ...friends]);
+      return group;
+    },
+    async deleteGroup(_, { id }) {
+      const group = await Group.findOne({ where: id });
+      const users = await group.getUsers();
+      await group.removeUsers(users);
+      await Message.destroy({ where: { groupId: group.id } });
+      await group.destroy();
+      return group;
+    },
+    async leaveGroup(_, { id, userId }) {
+      const group = await Group.findOne({ where: { id } });
+      await group.removeUser(userId);
+      const users = await group.getUsers();
+      if (!users.length) {
+        await group.destroy();
+      }
+      return group;
+    },
+    updateGroup(
+      _,
+      {
+        group: { id, name },
+      },
+    ) {
+      return Group.findOne({ where: { id } }).then(group => group.update({ name }));
+    },
   },
   Group: {
     users(group) {
