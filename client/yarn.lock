@@ -2521,6 +2521,12 @@ hoist-non-react-statics@^3.0.0:
   dependencies:
     react-is "^16.3.2"
 
+hoist-non-react-statics@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.1.0.tgz#42414ccdfff019cd2168168be998c7b3bd5245c0"
+  dependencies:
+    react-is "^16.3.2"
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -4435,6 +4441,13 @@ react-is@^16.3.2, react-is@^16.5.0:
 react-lifecycles-compat@^3, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+
+react-native-alpha-listview@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-alpha-listview/-/react-native-alpha-listview-0.2.1.tgz#d0f494cf18825adcd85b6901456b30255874d8fa"
+  dependencies:
+    merge "^1.2.0"
+    prop-types "^15.6.0"
 
 react-native-config@^0.11.5:
   version "0.11.5"
