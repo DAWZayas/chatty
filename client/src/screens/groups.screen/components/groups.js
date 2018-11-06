@@ -1,38 +1,18 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
-  Button, FlatList, StyleSheet, Text, TouchableHighlight, View,
+  FlatList, StyleSheet, Text, View,
 } from 'react-native';
 
-import { Query } from 'react-apollo';
+import { withLoading } from '../../../components/withLoading';
 
-import { USER_QUERY } from '../graphql/user.query';
-import withLoading from '../components/withLoading';
+import Header from './header';
+import Group from './group';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1,
-  },
-  groupContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  groupName: {
-    fontWeight: 'bold',
-    flex: 0.7,
-  },
-  header: {
-    alignItems: 'flex-end',
-    padding: 6,
-    borderColor: '#eee',
-    borderBottomWidth: 1,
   },
   warning: {
     textAlign: 'center',
@@ -40,29 +20,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = ({ onPress }) => (
-  <View style={styles.header}>
-    <Button title="New Group" onPress={onPress} />
-  </View>
-);
-Header.propTypes = {
-  onPress: PropTypes.func.isRequired,
-};
-
-const Group = ({ goToMessages, group: { id, name } }) => (
-  <TouchableHighlight key={id} onPress={goToMessages}>
-    <View style={styles.groupContainer}>
-      <Text style={styles.groupName}>{name}</Text>
-    </View>
-  </TouchableHighlight>
-);
-Group.propTypes = {
-  goToMessages: PropTypes.func.isRequired,
-  group: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-  }),
-};
 class Groups extends Component {
   static navigationOptions = {
     title: 'Chats',
@@ -133,10 +90,4 @@ Groups.propTypes = {
 
 const GropusWithLoading = withLoading(Groups);
 
-const UserQuery = props => (
-  <Query query={USER_QUERY} variables={{ id: 1 }}>
-    {({ data }) => <GropusWithLoading {...props} {...data} />}
-  </Query>
-);
-
-export default UserQuery;
+export default GropusWithLoading;
