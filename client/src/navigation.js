@@ -54,7 +54,12 @@ const MainScreenNavigator = createMaterialTopTabNavigator(
 );
 const AppNavigator = createStackNavigator(
   {
-    Main: { screen: MainScreenNavigator },
+    Main: {
+      screen: MainScreenNavigator,
+      navigationOptions: {
+        header: null,
+      },
+    },
     Messages: {
       screen: Messages,
     },
@@ -67,6 +72,7 @@ const AppNavigator = createStackNavigator(
     headerMode: 'screen',
   },
 );
+
 // reducer initialization code
 const initialState = AppNavigator.router.getStateForAction(
   StackActions.reset({
