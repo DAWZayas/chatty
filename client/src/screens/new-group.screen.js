@@ -9,6 +9,7 @@ import AlphabetListView from 'react-native-alpha-listview';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import SelectedUserList from '../components/selected-user-list.component';
+import Logo from '../components/logo';
 import { USER_QUERY } from '../graphql/user.query';
 
 const styles = StyleSheet.create({
@@ -117,7 +118,7 @@ class Cell extends Component {
     const { isSelected } = this.state;
     return (
       <View style={styles.cellContainer}>
-        <Image style={styles.cellImage} source={{ uri: 'https://reactjs.org/logo-og.png' }} />
+        <Logo style={styles.cellImage} />
         <Text style={styles.cellLabel}>{username}</Text>
         <View style={styles.checkButtonContainer}>
           <Icon.Button

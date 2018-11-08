@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  FlatList, Image, StyleSheet, Text, TouchableOpacity, View,
+  FlatList, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import Logo from './logo';
 
 const styles = StyleSheet.create({
   list: {
@@ -27,11 +29,6 @@ const styles = StyleSheet.create({
     top: -3,
     width: 20,
   },
-  itemImage: {
-    borderRadius: 27,
-    height: 54,
-    width: 54,
-  },
 });
 
 export class SelectedUserListItem extends Component {
@@ -54,7 +51,7 @@ export class SelectedUserListItem extends Component {
     return (
       <View style={styles.itemContainer}>
         <View>
-          <Image style={styles.itemImage} source={{ uri: 'https://reactjs.org/logo-og.png' }} />
+          <Logo />
           <TouchableOpacity onPress={this.remove} style={styles.itemIcon}>
             <Icon color="white" name="times" size={12} />
           </TouchableOpacity>

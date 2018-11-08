@@ -19,6 +19,8 @@ import { USER_QUERY } from '../graphql/user.query';
 import DELETE_GROUP_MUTATION from '../graphql/delete-group.mutation';
 import LEAVE_GROUP_MUTATION from '../graphql/leave-group.mutation';
 
+import Logo from '../components/logo';
+
 const resetAction = StackActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Main' })],
@@ -99,7 +101,7 @@ class GroupDetails extends Component {
 
   renderItem = ({ item: user }) => (
     <View style={styles.user}>
-      <Image style={styles.avatar} source={{ uri: 'https://reactjs.org/logo-og.png' }} />
+      <Logo style={styles.avatar} />
       <Text style={styles.username}>{user.username}</Text>
     </View>
   );
@@ -151,10 +153,7 @@ class GroupDetails extends Component {
             <View>
               <View style={styles.detailsContainer}>
                 <TouchableOpacity style={styles.groupImageContainer} onPress={this.pickGroupImage}>
-                  <Image
-                    style={styles.groupImage}
-                    source={{ uri: 'https://reactjs.org/logo-og.png' }}
-                  />
+                  <Logo />
                   <Text>edit</Text>
                 </TouchableOpacity>
                 <View style={styles.groupNameBorder}>

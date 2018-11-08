@@ -2,14 +2,7 @@ import R from 'ramda';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Alert,
-  Button,
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+  Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View,
 } from 'react-native';
 import { graphql, compose } from 'react-apollo';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -17,6 +10,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import { USER_QUERY } from '../graphql/user.query';
 import CREATE_GROUP_MUTATION from '../graphql/create-group.mutation';
 import SelectedUserList from '../components/selected-user-list.component';
+import Logo from '../components/logo';
 
 const goToNewGroup = group => StackActions.reset({
   index: 1,
@@ -60,11 +54,6 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     color: '#777',
     fontSize: 12,
-  },
-  groupImage: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
   },
   selected: {
     flexDirection: 'row',
@@ -177,7 +166,7 @@ class FinalizeGroup extends Component {
       <View style={styles.container}>
         <View style={styles.detailsContainer}>
           <TouchableOpacity style={styles.imageContainer}>
-            <Image style={styles.groupImage} source={{ uri: 'https://reactjs.org/logo-og.png' }} />
+            <Logo />
             <Text>edit</Text>
           </TouchableOpacity>
           <View style={styles.inputContainer}>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import {
-  FlatList, Image, StyleSheet, Text, TouchableOpacity, View,
+  FlatList, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
@@ -8,7 +8,8 @@ import { graphql, compose } from 'react-apollo';
 
 import Message from '../components/message.component';
 import MessageInput from '../components/message-input.component';
-import withLoading from '../components/withLoading';
+import { withLoading } from '../components/withLoading';
+import Logo from '../components/logo';
 
 import GROUP_QUERY from '../graphql/group.query';
 import CREATE_MESSAGE_MUTATION from '../graphql/create-message.mutation';
@@ -51,7 +52,7 @@ class Messages extends Component {
       headerTitle: (
         <TouchableOpacity style={styles.titleWrapper} onPress={goToGroupDetails}>
           <View style={styles.title}>
-            <Image style={styles.titleImage} source={{ uri: 'https://reactjs.org/logo-og.png' }} />
+            <Logo style={styles.titleImage} />
             <Text>{state.params.title}</Text>
           </View>
         </TouchableOpacity>
