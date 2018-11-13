@@ -2,7 +2,7 @@ import R from 'ramda';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ActivityIndicator, Button, Image, StyleSheet, Text, View,
+  ActivityIndicator, Button, StyleSheet, Text, View,
 } from 'react-native';
 import { graphql, compose } from 'react-apollo';
 import AlphabetListView from 'react-native-alpha-listview';
@@ -94,7 +94,6 @@ SectionItem.propTypes = {
 class Cell extends Component {
   constructor(props) {
     super(props);
-    this.toggle = this.toggle.bind(this);
     this.state = {
       isSelected: props.isSelected(props.item),
     };
@@ -106,15 +105,9 @@ class Cell extends Component {
     });
   }
 
-  toggle() {
-    const { item, toggle } = this.props;
-    toggle(item);
-  }
-
   render() {
-    const {
-      item: { username },
-    } = this.props;
+    const { item, toggle } = this.props;
+    const { username } = item;
     const { isSelected } = this.state;
     return (
       <View style={styles.cellContainer}>
@@ -127,7 +120,7 @@ class Cell extends Component {
             color="white"
             iconStyle={styles.checkButtonIcon}
             name="check"
-            onPress={this.toggle}
+            onPress={() => toggle(item)}
             size={16}
             style={styles.checkButton}
           />
@@ -166,6 +159,7 @@ class NewGroup extends Component {
     const { navigation } = this.props;
     let selected = [];
     if (navigation.state.params) {
+      // eslint-disable-next-line prefer-destructuring
       selected = navigation.state.params.selected;
     }
 
@@ -175,10 +169,6 @@ class NewGroup extends Component {
         ? R.groupBy(friend => friend.username.charAt(0).toUpperCase(), props.user.friends)
         : [],
     };
-
-    this.finalizeGroup = this.finalizeGroup.bind(this);
-    this.isSelected = this.isSelected.bind(this);
-    this.toggle = this.toggle.bind(this);
   }
 
   componentDidMount() {
@@ -212,15 +202,15 @@ class NewGroup extends Component {
     }
   }
 
-  refreshNavigation(selected) {
+  refreshNavigation = (selected) => {
     const { navigation } = this.props;
     navigation.setParams({
       mode: selected && selected.length ? 'ready' : undefined,
       finalizeGroup: this.finalizeGroup,
     });
-  }
+  };
 
-  finalizeGroup() {
+  finalizeGroup = () => {
     const {
       navigation: { navigate },
       user,
@@ -231,21 +221,21 @@ class NewGroup extends Component {
       friendCount: user.friends.length,
       userId: user.id,
     });
-  }
+  };
 
-  isSelected(user) {
+  isSelected = (user) => {
     const { selected } = this.state;
     return ~selected.indexOf(user);
-  }
+  };
 
-  toggle(user) {
+  toggle = (user) => {
     const { selected } = this.state;
     const index = selected.indexOf(user);
 
     this.setState({
       selected: ~index ? selected.filter((_, i) => i !== index) : [...selected, user],
     });
-  }
+  };
 
   render() {
     const { user, loading } = this.props;

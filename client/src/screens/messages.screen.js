@@ -71,7 +71,6 @@ class Messages extends Component {
     this.state = {
       usernameColors,
     };
-    this.renderItem = this.renderItem.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -99,10 +99,6 @@ class FinalizeGroup extends Component {
     this.state = {
       selected,
     };
-
-    this.create = this.create.bind(this);
-    this.pop = this.pop.bind(this);
-    this.remove = this.remove.bind(this);
   }
 
   componentDidMount() {
@@ -117,12 +113,7 @@ class FinalizeGroup extends Component {
     }
   }
 
-  pop() {
-    const { navigation } = this.props;
-    navigation.goBack();
-  }
-
-  remove(user) {
+  remove = (user) => {
     const { selected } = this.state;
     const index = selected.indexOf(user);
     if (~index) {
@@ -130,9 +121,9 @@ class FinalizeGroup extends Component {
         selected: selected.filter((_, i) => i !== index),
       });
     }
-  }
+  };
 
-  create() {
+  create = () => {
     const { createGroup, navigation } = this.props;
     const { name, selected } = this.state;
 
@@ -147,7 +138,7 @@ class FinalizeGroup extends Component {
       .catch((error) => {
         Alert.alert('Error Creating New Group', error.message, [{ text: 'OK', onPress: () => {} }]);
       });
-  }
+  };
 
   refreshNavigation(ready) {
     const { navigation } = this.props;

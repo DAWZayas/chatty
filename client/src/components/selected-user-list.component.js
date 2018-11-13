@@ -31,36 +31,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export class SelectedUserListItem extends Component {
-  constructor(props) {
-    super(props);
+export const SelectedUserListItem = ({ user: { username }, remove }) => (
+  <View style={styles.itemContainer}>
+    <View>
+      <Logo />
+      <TouchableOpacity onPress={remove} style={styles.itemIcon}>
+        <Icon color="white" name="times" size={12} />
+      </TouchableOpacity>
+    </View>
+    <Text>{username}</Text>
+  </View>
+);
 
-    this.remove = this.remove.bind(this);
-  }
-
-  remove() {
-    const { remove, user } = this.props;
-    remove(user);
-  }
-
-  render() {
-    const {
-      user: { username },
-    } = this.props;
-
-    return (
-      <View style={styles.itemContainer}>
-        <View>
-          <Logo />
-          <TouchableOpacity onPress={this.remove} style={styles.itemIcon}>
-            <Icon color="white" name="times" size={12} />
-          </TouchableOpacity>
-        </View>
-        <Text>{username}</Text>
-      </View>
-    );
-  }
-}
 SelectedUserListItem.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.number,
@@ -70,18 +52,12 @@ SelectedUserListItem.propTypes = {
 };
 
 class SelectedUserList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.renderItem = this.renderItem.bind(this);
-  }
-
   keyExtractor = item => item.id.toString();
 
-  renderItem({ item: user }) {
+  renderItem = ({ item: user }) => {
     const { remove } = this.props;
-    return <SelectedUserListItem user={user} remove={remove} />;
-  }
+    return <SelectedUserListItem user={user} remove={() => remove(user)} />;
+  };
 
   render() {
     const { data } = this.props;
