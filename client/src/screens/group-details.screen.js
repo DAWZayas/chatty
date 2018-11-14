@@ -1,10 +1,8 @@
-// TODO: update group functionality
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   ActivityIndicator,
   Button,
-  Image,
   FlatList,
   StyleSheet,
   Text,
