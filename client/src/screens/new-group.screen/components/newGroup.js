@@ -90,6 +90,7 @@ class NewGroup extends Component {
       selected,
       friendCount: user.friends.length,
       userId: user.id,
+      remove: this.toggle,
     });
   };
 
@@ -98,12 +99,13 @@ class NewGroup extends Component {
     return ~selected.indexOf(user);
   };
 
-  toggle = (user) => {
+  toggle = (toggledUser) => {
     const { selected } = this.state;
-    const index = selected.indexOf(user);
+    const { id } = toggledUser;
+    const index = selected.findIndex(user => user.id === id);
 
     this.setState({
-      selected: ~index ? selected.filter((_, i) => i !== index) : [...selected, user],
+      selected: ~index ? selected.filter((_, i) => i !== index) : [...selected, toggledUser],
     });
   };
 

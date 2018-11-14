@@ -115,11 +115,16 @@ class FinalizeGroup extends Component {
 
   remove = (user) => {
     const { selected } = this.state;
+    // eslint-disable-next-line react/destructuring-assignment
+    const { remove } = this.props.navigation.state.params;
     const index = selected.indexOf(user);
     if (~index) {
-      this.setState({
-        selected: selected.filter((_, i) => i !== index),
-      });
+      this.setState(
+        {
+          selected: selected.filter((_, i) => i !== index),
+        },
+        () => remove(user),
+      );
     }
   };
 
@@ -193,6 +198,7 @@ FinalizeGroup.propTypes = {
     state: PropTypes.shape({
       params: PropTypes.shape({
         friendCount: PropTypes.number.isRequired,
+        remove: PropTypes.func.isRequired,
       }),
     }),
   }),
