@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Logo from '../../../components/logo';
+import Logo from 'chatty/src/components/logo';
 
 const styles = StyleSheet.create({
   cellContainer: {

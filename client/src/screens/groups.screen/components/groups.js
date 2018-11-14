@@ -4,7 +4,7 @@ import {
   FlatList, StyleSheet, Text, View,
 } from 'react-native';
 
-import { withLoading } from '../../../components/withLoading';
+import { withLoading } from 'chatty/src/components/withLoading';
 
 import Header from './header';
 import Group from './group';

@@ -1,5 +1,5 @@
 import { graphql, compose } from 'react-apollo';
-import { USER_QUERY } from '../../../graphql/user.query';
+import { USER_QUERY } from 'chatty/src/graphql/user.query';
 
 import NewGroup from '../components/newGroup';
 

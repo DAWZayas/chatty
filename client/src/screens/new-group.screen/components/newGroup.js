@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import AlphabetListView from 'react-native-alpha-listview';
 
-import SelectedUserList from '../../../components/selected-user-list.component';
+import SelectedUserList from 'chatty/src/components/selected-user-list.component';
 
 import Cell from './cell';
 import SectionHeader from './sectionHeader';

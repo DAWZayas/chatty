@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Query } from 'react-apollo';
 
-import { USER_QUERY } from '../../../graphql/user.query';
+import { USER_QUERY } from 'chatty/src/graphql/user.query';
 
 import { Groups } from '../components';
 
