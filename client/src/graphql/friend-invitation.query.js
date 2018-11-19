@@ -6,9 +6,11 @@ export const FRIEND_INVITATION_QUERY = gql`
     friendInvitations(userId: $userId) {
       id
       from {
+        id
         username
       }
       to {
+        id
         username
       }
     }

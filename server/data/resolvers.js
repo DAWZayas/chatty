@@ -92,8 +92,15 @@ export const resolvers = {
         invitation: { text, from, to },
       },
     ) {
-      const user = await User.findOne({ where: { id: from } });
-      const friends = await user.getFriends({ where: { id: to } });
+      if (from === to) {
+        throw new Error('You can not invite yourself');
+      }
+      const userFrom = await User.findOne({ where: { id: from } });
+
+      if (!userFrom) {
+        throw new Error(`There is no user with id: ${from}`);
+      }
+      const friends = await userFrom.getFriends({ where: { id: to } });
 
       if (friends && friends.length) {
         throw new Error(`user ${to} is already friend of ${from}`);
@@ -104,9 +111,7 @@ export const resolvers = {
       });
 
       if (previousInvitation) {
-        throw new Error(
-          `There is already an invitation between ${to} and ${from}`,
-        );
+        throw new Error(`There is already an invitation between ${to} and ${from}`);
       }
 
       const inBlackList = await BlackList.findOne({
@@ -114,11 +119,9 @@ export const resolvers = {
       });
 
       if (inBlackList) {
-        throw new Error(
-          `Users ${to} and ${from} are in black list`,
-        );
+        throw new Error(`Users ${to} and ${from} are in black list`);
       }
-      
+
       const invitation = await FriendInvitation.create({
         fromId: from,
         toId: to,
@@ -151,6 +154,9 @@ export const resolvers = {
       return fromUser;
     },
     async addToBlackList(_, { from, to }) {
+      if (from === to) {
+        throw new Error('You can not bane yourself');
+      }
       const fromUser = await User.findOne({ where: { id: from } });
       const toUser = await User.findOne({ where: { id: to } });
       await fromUser.removeFriend(toUser);
