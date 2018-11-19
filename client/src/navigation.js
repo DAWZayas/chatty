@@ -1,6 +1,8 @@
+import R from 'ramda';
 import React, { Component } from 'react';
 import {
   createMaterialTopTabNavigator,
+  createSwitchNavigator,
   createStackNavigator,
   NavigationActions,
   StackActions,
@@ -19,6 +21,8 @@ import Messages from './screens/messages.screen';
 import NewGroup from './screens/new-group.screen';
 import FinalizeGroup from './screens/finalize-group.screen';
 import GroupDetails from './screens/group-details.screen';
+
+import { friendRoutes } from './screens/friends.screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -42,16 +46,26 @@ const TestScreen = title => () => (
   </View>
 );
 
+const FriendsSwitchNavigator = createSwitchNavigator(R.map(({ Screen }) => Screen, friendRoutes));
+
 // tabs in main screen
 const MainScreenNavigator = createMaterialTopTabNavigator(
   {
     Chats: { screen: Groups },
+    Friends: {
+      screen: FriendsSwitchNavigator,
+      navigationOptions: (props) => {
+        const { navigation: { state: { index, routes } } } = props;
+        return { title: friendRoutes[routes[index].key].title };
+      },
+    },
     Settings: { screen: TestScreen('Settings') },
   },
   {
     initialRouteName: 'Chats',
   },
 );
+
 const AppNavigator = createStackNavigator(
   {
     Main: {

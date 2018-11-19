@@ -6,9 +6,11 @@ export const BLACK_LIST_QUERY = gql`
     blackList(userId: $userId) {
       id
       from {
+        id
         username
       }
       to {
+        id
         username
       }
     }
