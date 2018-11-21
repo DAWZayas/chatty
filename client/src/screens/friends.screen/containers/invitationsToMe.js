@@ -14,10 +14,7 @@ const FriendInvitationToMeContainer = props => (
         {...props}
         users={
           data.friendInvitations
-            ? R.pluck(
-              'to',
-              R.filter(({ from: { id } }) => id === 1, data.friendInvitations),
-            )
+            ? R.pluck('from', R.filter(({ to: { id } }) => id === 1, data.friendInvitations))
             : []
         }
       />

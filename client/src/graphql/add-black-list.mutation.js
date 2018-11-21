@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const ADD_TO_BLACK_LIST_MUTATION = gql`
+export const ADD_TO_BLACK_LIST_MUTATION = gql`
   mutation addToBlackList($from: Int!, $to: Int!) {
     addToBlackList(from: $from, to: $to) {
       id

@@ -15,10 +15,7 @@ const BlackListFromMeContainer = props => (
         users={
           !data.blackList
             ? []
-            : R.pluck(
-              'to',
-              R.filter(({ from: { id } }) => id === 1, data.blackList),
-            )
+            : R.pluck('from', R.filter(({ to: { id } }) => id === 1, data.blackList))
         }
       />
     )}

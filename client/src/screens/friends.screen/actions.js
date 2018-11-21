@@ -1,3 +1,10 @@
+import acceptFriendInvitation from './containers/acceptFriendInvitation';
+import cancelFriendInvitationToMe from './containers/cancelFriendInvitationToMe';
+import cancelFriendInvitationFromMe from './containers/cancelFriendInvitationFromMe';
+import addToBlackList from './containers/addToBlackList';
+import removeFromBlackList from './containers/removeFromBlackList';
+import deleteFriend from './containers/deleteFriend';
+
 const actions = [
   {
     action: 'accept-invitation',
@@ -6,6 +13,7 @@ const actions = [
     style: {
       backgroundColor: 'white',
     },
+    actionHOC: acceptFriendInvitation,
   },
   {
     action: 'cancel-invitation-from-me',
@@ -14,6 +22,7 @@ const actions = [
     style: {
       backgroundColor: 'white',
     },
+    actionHOC: cancelFriendInvitationFromMe,
   },
   {
     action: 'cancel-invitation-to-me',
@@ -22,6 +31,7 @@ const actions = [
     style: {
       backgroundColor: 'white',
     },
+    actionHOC: cancelFriendInvitationToMe,
   },
   {
     action: 'to-blacklist',
@@ -30,6 +40,7 @@ const actions = [
     style: {
       backgroundColor: 'black',
     },
+    actionHOC: addToBlackList,
   },
   {
     action: 'remove-from-blacklist',
@@ -38,6 +49,7 @@ const actions = [
     style: {
       backgroundColor: 'red',
     },
+    actionHOC: removeFromBlackList,
   },
   {
     action: 'remove-friend',
@@ -46,6 +58,7 @@ const actions = [
     style: {
       backgroundColor: 'red',
     },
+    actionHOC: deleteFriend,
   },
 ];
 

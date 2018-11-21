@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const ACCEPT_FRIEND_INVITATION_MUTATION = gql`
+export const ACCEPT_FRIEND_INVITATION_MUTATION = gql`
   mutation acceptFriendInvitation($from: Int!, $to: Int!) {
     acceptFriendInvitation(from: $from, to: $to) {
       username

@@ -25,7 +25,7 @@ const Friend = ({ friend: { id, username }, actions }) => (
   <View style={styles.friendContainer}>
     <Text style={styles.friendName}>{username}</Text>
     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-      {actions.map(Action)}
+      {actions.map(action => Action({ ...action, userId: id }))}
     </View>
   </View>
 );

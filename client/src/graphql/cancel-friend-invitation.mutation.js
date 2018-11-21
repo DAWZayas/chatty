@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const CANCEL_FRIEND_INVITATION_MUTATION = gql`
+export const CANCEL_FRIEND_INVITATION_MUTATION = gql`
   mutation cancelFriendInvitation($from: Int!, $to: Int!) {
     cancelFriendInvitation(from: $from, to: $to)
   }

@@ -2,15 +2,12 @@ import R from 'ramda';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+  Button, FlatList, StyleSheet, Text, View,
 } from 'react-native';
 
 import Friend from './friend';
+import CreateFriendInvitation from '../containers/createFriendInvitation';
+
 import friendRoutes from '../routes';
 import actions from '../actions';
 
@@ -26,28 +23,12 @@ const styles = StyleSheet.create({
 });
 
 class Friends extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userId: null,
-    };
-  }
-
   keyExtractor = item => item.id.toString();
 
-  renderItem = routeActions => ({ item }) => (
-    <Friend friend={item} actions={routeActions} />
-  );
-
-  addFriendInvitation = () => {
-    const { navigation } = this.props;
-    this.input.blur();
-    navigation.navigate('InvitationsFromMe');
-  };
+  renderItem = routeActions => ({ item }) => <Friend friend={item} actions={routeActions} />;
 
   render() {
     const { users, navigation } = this.props;
-    const { userId } = this.state;
     const {
       state: { routeName },
     } = navigation;
@@ -64,38 +45,9 @@ class Friends extends Component {
           extraData={routeActions}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem(routeActions)}
-          ListFooterComponent={() => (R.isEmpty(users) ? <Text>{route.emptyMessage}</Text> : null)
-          }
+          ListFooterComponent={() => (R.isEmpty(users) ? <Text>{route.emptyMessage}</Text> : null)}
         />
-        {routeName === 'MyFriends' && (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              margin: 4,
-            }}
-          >
-            <TextInput
-              ref={(input) => {
-                this.input = input;
-              }}
-              onChangeText={text => this.setState({ userId: +text })}
-              keyboardType="numeric"
-              style={{
-                flex: 3,
-                borderColor: 'gray',
-                borderWidth: 1,
-                margin: 5,
-              }}
-            />
-            <Button
-              onPress={this.addFriendInvitation}
-              style={{ flex: 1, borderRdius: 12, margin: 5 }}
-              title="Invite friend"
-              disabled={!userId}
-            />
-          </View>
-        )}
+        {routeName === 'MyFriends' && <CreateFriendInvitation />}
         <View>
           {R.compose(
             R.values,

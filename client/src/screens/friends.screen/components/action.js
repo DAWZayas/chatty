@@ -16,19 +16,24 @@ const styles = StyleSheet.create({
 });
 
 const Action = ({
-  action, name, color, style,
-}) => (
-  <View key={action} style={{ marginLeft: 4 }}>
-    <Icon.Button
-      name={name}
-      color={color}
-      borderRadius={16}
-      iconStyle={styles.actionButtonIcon}
-      size={24}
-      style={[styles.actionButton, style]}
-    />
-  </View>
-);
+  action, name, color, style, userId, actionHOC,
+}) => {
+  const WithMakeAction = actionHOC(({ makeAction }) => (
+    <View style={{ marginLeft: 4 }}>
+      <Icon.Button
+        name={name}
+        color={color}
+        borderRadius={16}
+        iconStyle={styles.actionButtonIcon}
+        size={24}
+        style={[styles.actionButton, style]}
+        onPress={() => makeAction(userId)}
+      />
+    </View>
+  ));
+
+  return <WithMakeAction key={action} />;
+};
 
 Action.propTypes = {
   action: PropTypes.string.isRequired,
