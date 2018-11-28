@@ -79,11 +79,11 @@ Se trata de implementar un CRUD de amigos.
 
 #### 1.1- (0,5 puntos diseño) Cree un una nueva pestaña que al pulsarla navegue a `friends`.
 
-![image1.1](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image1.1.png)
+![image1.1](images/image1.1.png)
 
 #### 1.2- Al pulsar sobre `friends` se mostrarán los amigos del usuario 1.
 
-![image1.2](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image1.2.png)
+![image1.2](images/image1.2.png)
 
 #### 1.2.1- (1 punto diseño) Por respetar los estilos y usar un `FlatList`.
 
@@ -93,15 +93,15 @@ Se trata de implementar un CRUD de amigos.
 
 #### 2.1.- (1 punto diseño) Al final de la pantalla se mostrará un `TextInput` y un `Button` para añadir amigos. Respete colores, tamaños y márgenes.
 
-![image2.1](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image2.1.png)
+![image2.1](images/image2.1.png)
 
 #### 2.2.- (0,5 puntos diseño) Al poner el foco en el `TextInput` el teclado será numérico (consulte la documentación del componente).
 
-![image2.2](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image2.2.png)
+![image2.2](images/image2.2.png)
 
 #### 2.3.- (0,5 puntos diseño) El `TextInput` estará deshabilitado cuando el texto esté vacío y habilitado cuando no lo esté.
 
-![image2.3](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image2.3.png)
+![image2.3](images/image2.3.png)
 
 #### 2.4.- (1,5 puntos desarrollo) Al pulsar sobre `Invite friend` se llamará a la mutación `create-friend-invitation.mutation` con el `id` del parámetro introducido.
 
@@ -109,11 +109,11 @@ Se trata de implementar un CRUD de amigos.
 
 #### 2.6.- (0,5 puntos diseño) El servidor puede dar errores al añadir la invitación (por ejemplo por que ya sois amigos). Si el servidor da error, se notificará en un componente `Alert` (consulte la documentación). En caso de errores, no se hará lo dicho en el punto 2.5.
 
-![image2.6](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image2.6.png)
+![image2.6](images/image2.6.png)
 
 #### 2.7.- Habrá un botón que permitirá borrar amigos.
 
-![image2.7](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image2.7.png)
+![image2.7](images/image2.7.png)
 
 #### 2.7.1.- (1 punto diseño) Por respetar exactamente los estilos.
 
@@ -125,25 +125,25 @@ Nota: El icono que debe usar tiene por `name` el valor `times-circle`
 
 #### 3.1.- (0,5 puntos diseño) Al final de la pantalla `Friends` se verán tres botones con los estilos y colores que se muestran en la imagen.
 
-![image3.1](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.1.png)
+![image3.1](images/image3.1.png)
 
 #### 3.2.- (1 punto diseño) Al pulsar sobre cada botón se cambiará el título de la ventana. El botón de `Friends` cambiará el título a `Friends` y seguirá mostrando lo que ya se mostraba al navegar.
 
 Nota: Puede resultar difícil de hacer.
 
-![image3.2](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.2.png)
+![image3.2](images/image3.2.png)
 
-![image3.2b](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.2b.png)
+![image3.2b](images/image3.2b.png)
 
 #### 3.3.- (0,5 puntos diseño) Al pulsar se mostrará el texto de las anteriores imágenes.
 
 #### 3.4.- (1 punto diseño) Al pulsar se ocultará el botón pulsado y se mostrarán el resto de opciones.
 
-![image3.4](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.4.png)
+![image3.4](images/image3.4.png)
 
-![image3.4b](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.4b.png)
+![image3.4b](images/image3.4b.png)
 
-![image3.4bb](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.4bb.png)
+![image3.4bb](images/image3.4bb.png)
 
 #### 3.5.- (0,5 puntos diseño) Al pulsar el botón `back` se navegará a `Chats` directamente incluso si se han pulsado varios botones y se mantendrá el título del último botón pulsado, es decir, si lo último pulsado es `Invitations` se verá ese texto y al pulsar se verá el texto `You do not have invitations`.
 
@@ -153,7 +153,7 @@ Nota: Quizás la forma más fácil de hacer esto es usar un componente createSwi
 
 Nota: recuerde el apartado 2.5, en el que al añadir una invitación, se navegará a `Your Invitations`
 
-![image3.6](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.6.png)
+![image3.6](images/image3.6.png)
 
 #### 3.6.1.- (0,5 puntos diseño) Por mostrar los estilos de la imagen.
 
@@ -167,7 +167,7 @@ Nota2: Observe que ya no se muestra la caja de texto y el botón que permite añ
 
 #### 3.7.- Al pulsar sobre `Invitations`, si ha recibido invitaciones, se mostrarán.
 
-![image3.7](https://bitbucket.org/surtich/chatty-enunciado-primera/downloads/image3.7.png)
+![image3.7](images/image3.7.png)
 
 #### 3.7.1.- (0,5 puntos diseño) Por mostrar los estilos de la imagen.
 
