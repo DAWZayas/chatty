@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 import { ApolloServer } from 'apollo-server';
 import { resolvers } from './data/resolvers';
 import { typeDefs } from './data/schema';
