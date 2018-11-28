@@ -28,7 +28,7 @@ const reduxLink = new ReduxLink(store);
 const errorLink = onError((errors) => {
   console.log(errors);
 });
-const httpLink = createHttpLink({ uri: `http://${URL}` });
+const httpLink = createHttpLink({ uri: URL });
 const link = ApolloLink.from([reduxLink, errorLink, httpLink]);
 export const client = new ApolloClient({
   link,
