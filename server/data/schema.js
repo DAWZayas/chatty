@@ -34,12 +34,35 @@ export const typeDefs = gql`
     text: String # invitation text
   }
 
+  # input for relay cursor connections
+  input ConnectionInput {
+    first: Int
+    after: String
+    last: Int
+    before: String
+  }
+
+  type MessageConnection {
+    edges: [MessageEdge]
+    pageInfo: PageInfo!
+  }
+
+  type MessageEdge {
+    cursor: String!
+    node: Message!
+  }
+
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+  }
+
   # a group chat entity
   type Group {
     id: Int! # unique id for the group
     name: String # name of the group
     users: [User!]! # users in the group
-    messages: [Message!]! # messages sent to the group
+    messages(messageConnection: ConnectionInput): MessageConnection # messages sent to the group
   }
   # a user -- keep type really simple for now
   type User {
