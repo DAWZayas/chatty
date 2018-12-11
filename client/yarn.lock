@@ -4449,9 +4449,9 @@ react-native-alpha-listview@^0.2.1:
     merge "^1.2.0"
     prop-types "^15.6.0"
 
-react-native-config@^0.11.6:
-  version "0.11.6"
-  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-0.11.6.tgz#efe9027be534629a41a4561de50f76f40dabb78a"
+react-native-config@^0.11.7:
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-0.11.7.tgz#a2b323f2ecd76a4df88cbb6bc86eaa2ef9febee7"
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
