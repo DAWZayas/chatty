@@ -3,19 +3,20 @@ import 'babel-polyfill';
 import { ApolloServer } from 'apollo-server';
 import { resolvers } from './data/resolvers';
 import { typeDefs } from './data/schema';
+import configurationManager from './configurationManager';
 
 import mockDB from './data/mocks';
 
-const PORT = 8080;
+const { port } = configurationManager.graphQL;
 
 const startServer = async () => {
   const server = new ApolloServer({ typeDefs, resolvers });
-  const { url } = await server.listen({ port: PORT });
+  const { url } = await server.listen({ port });
   console.log(`🚀 Server ready at ${url}`);
 };
 
 const init = async () => {
-  await mockDB({ populating: true, force: true });
+  await mockDB(configurationManager.mock);
   startServer();
 };
 
