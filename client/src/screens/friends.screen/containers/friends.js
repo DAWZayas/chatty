@@ -9,7 +9,7 @@ import { Friends } from '../components';
 const FriendsContainer = props => (
   <Query query={USER_QUERY} variables={{ id: 1 }}>
     {({ data }) => (
-      <Friends {...props} users={data.user ? data.user.friends : []} />
+      <Friends {...props} users={data && data.user ? data.user.friends : []} />
     )}
   </Query>
 );

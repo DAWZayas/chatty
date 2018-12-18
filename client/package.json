@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start-emulator": "$ANDROID_HOME/emulator/emulator @Nexus_6_API_27",
     "test": "jest",
-    "deploy": "cd android && ENVFILE=.env.prod ./gradlew assembleRelease && cd ..",
+    "build": "cd android && ENVFILE=.env.prod ./gradlew assembleRelease && cd ..",
     "install": "adb install -r android/app/build/outputs/apk/release/app-release.apk"
   },
   "dependencies": {
