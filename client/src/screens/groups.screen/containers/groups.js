@@ -8,7 +8,9 @@ import { Groups } from '../components';
 
 const GroupsContainer = props => (
   <Query query={USER_QUERY} variables={{ id: 1 }}>
-    {({ data }) => <Groups {...props} {...data} />}
+    {({ data, refetch, networkStatus }) => (
+      <Groups {...props} {...data} refetch={refetch} networkStatus={networkStatus} />
+    )}
   </Query>
 );
 

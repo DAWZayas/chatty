@@ -86,10 +86,26 @@ class Messages extends Component {
     }
   }
 
-  keyExtractor = item => item.id.toString();
+  onEndReached = () => {
+    const { loadingMoreEntries } = this.state;
+    const { loadMoreEntries, group } = this.props;
+    if (!loadingMoreEntries && group.messages.pageInfo.hasNextPage) {
+      this.setState({
+        loadingMoreEntries: true,
+      });
+      loadMoreEntries().then(() => {
+        this.setState({
+          loadingMoreEntries: false,
+        });
+      });
+    }
+  };
 
-  renderItem = ({ item: message }) => {
+  keyExtractor = item => item.node.id.toString();
+
+  renderItem = ({ item: edge }) => {
     const { usernameColors } = this.state;
+    const message = edge.node;
     return (
       <Message
         color={usernameColors[message.from.username]}
@@ -106,7 +122,7 @@ class Messages extends Component {
       userId: 1, // faking the user for now
       text,
     }).then(() => {
-      this.flatList.scrollToEnd({ animated: true });
+      this.flatList.scrollToIndex({ index: 0, animated: true });
     });
   };
 
@@ -123,10 +139,12 @@ class Messages extends Component {
           ref={(ref) => {
             this.flatList = ref;
           }}
-          data={group.messages.slice().reverse()}
+          inverted
+          data={group.messages.edges}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ListEmptyComponent={<View />}
+          onEndReached={this.onEndReached}
         />
         <MessageInput send={this.send} />
       </View>
@@ -145,9 +163,21 @@ Messages.propTypes = {
     }),
   }),
   group: PropTypes.shape({
-    messages: PropTypes.array,
+    messages: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          cursor: PropTypes.string,
+          node: PropTypes.object,
+        }),
+      ),
+      pageInfo: PropTypes.shape({
+        hasNextPage: PropTypes.bool,
+        hasPreviousPage: PropTypes.bool,
+      }),
+    }),
     users: PropTypes.array,
   }),
+  loadMoreEntries: PropTypes.func,
 };
 
 export default Messages;

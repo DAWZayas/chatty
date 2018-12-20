@@ -1,21 +1,14 @@
 import gql from 'graphql-tag';
 
-import MESSAGE_FRAGMENT from './message.fragment';
+import GROUP_FRAGMENT from './group.fragment';
 
 const GROUP_QUERY = gql`
-  query group($groupId: Int!) {
+  query group($groupId: Int!, $messageConnection: ConnectionInput = { first: 0 }) {
     group(id: $groupId) {
-      id
-      name
-      users {
-        id
-        username
-      }
-      messages {
-        ...MessageFragment
-      }
+      ...GroupFragment
     }
   }
-  ${MESSAGE_FRAGMENT}
+  ${GROUP_FRAGMENT}
 `;
+
 export default GROUP_QUERY;

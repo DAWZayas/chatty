@@ -25,6 +25,11 @@ class Groups extends Component {
     title: 'Chats',
   };
 
+  onRefresh = () => {
+    const { refetch } = this.props;
+    refetch();
+  };
+
   keyExtractor = item => item.id.toString();
 
   goToMessages = group => () => {
@@ -44,7 +49,7 @@ class Groups extends Component {
   renderItem = ({ item }) => <Group group={item} goToMessages={this.goToMessages(item)} />;
 
   render() {
-    const { user } = this.props;
+    const { user, networkStatus } = this.props;
 
     if (!user) {
       return null;
@@ -66,6 +71,8 @@ class Groups extends Component {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           ListHeaderComponent={() => <Header onPress={this.goToNewGroup} />}
+          onRefresh={this.onRefresh}
+          refreshing={networkStatus === 4}
         />
       </View>
     );
@@ -76,6 +83,8 @@ Groups.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func,
   }),
+  networkStatus: PropTypes.number,
+  refetch: PropTypes.func,
   user: PropTypes.shape({
     id: PropTypes.number.isRequired,
     email: PropTypes.string.isRequired,
