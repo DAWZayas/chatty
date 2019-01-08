@@ -38,8 +38,6 @@ export const typeDefs = gql`
   input ConnectionInput {
     first: Int
     after: String
-    last: Int
-    before: String
   }
 
   type MessageConnection {
@@ -123,9 +121,7 @@ export const typeDefs = gql`
     updateGroup(group: UpdateGroupInput!): Group
 
     # friend invitation CRUD
-    createFriendInvitation(
-      invitation: CreateFriendInvitationInput!
-    ): FriendInvitation
+    createFriendInvitation(invitation: CreateFriendInvitationInput!): FriendInvitation
     cancelFriendInvitation(from: Int!, to: Int!): Boolean
     acceptFriendInvitation(from: Int!, to: Int!): User
 

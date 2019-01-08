@@ -5,15 +5,6 @@ import {
 
 export const resolvers = {
   Date: GraphQLDate,
-  PageInfo: {
-    // we will have each connection supply its own hasNextPage/hasPreviousPage functions!
-    hasNextPage(connection) {
-      return connection.hasNextPage();
-    },
-    hasPreviousPage(connection) {
-      return connection.hasPreviousPage();
-    },
-  },
   Query: {
     group(_, args) {
       return Group.find({ where: args });
@@ -190,21 +181,13 @@ export const resolvers = {
       return group.getUsers();
     },
     messages(group, { messageConnection = {} }) {
-      const {
-        first, last, before, after,
-      } = messageConnection;
+      const { first, after } = messageConnection;
 
       // base query -- get messages from the right group
       const where = { groupId: group.id };
 
       // because we return messages from newest -> oldest
-      // before actually means newer (id > cursor)
       // after actually means older (id < cursor)
-
-      if (before) {
-        // convert base-64 to utf8 id
-        where.id = { $gt: Buffer.from(before, 'base64').toString() };
-      }
 
       if (after) {
         where.id = { $lt: Buffer.from(after, 'base64').toString() };
@@ -213,7 +196,7 @@ export const resolvers = {
       return Message.findAll({
         where,
         order: [['id', 'DESC']],
-        limit: first || last,
+        limit: first,
       }).then((messages) => {
         const edges = messages.map(message => ({
           cursor: Buffer.from(message.id.toString()).toString('base64'), // convert id to cursor
@@ -224,7 +207,7 @@ export const resolvers = {
           edges,
           pageInfo: {
             hasNextPage() {
-              if (messages.length < (last || first)) {
+              if (messages.length < first) {
                 return Promise.resolve(false);
               }
 
@@ -232,7 +215,7 @@ export const resolvers = {
                 where: {
                   groupId: group.id,
                   id: {
-                    [before ? '$gt' : '$lt']: messages[messages.length - 1].id,
+                    $lt: messages[messages.length - 1].id,
                   },
                 },
                 order: [['id', 'DESC']],
