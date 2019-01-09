@@ -1,3 +1,4 @@
+import R from 'ramda';
 import GraphQLDate from 'graphql-date';
 import { withFilter } from 'apollo-server';
 import {
@@ -6,6 +7,7 @@ import {
 import { pubsub } from '../subscriptions';
 
 const MESSAGE_ADDED_TOPIC = 'messageAdded';
+const GROUP_ADDED_TOPIC = 'groupAdded';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -67,6 +69,12 @@ export const resolvers = {
         users: [user, ...friends],
       });
       await group.addUsers([user, ...friends]);
+
+      // append the user list to the group object
+      // to pass to pubsub so we can check members
+      group.users = [user, ...friends];
+      pubsub.publish(GROUP_ADDED_TOPIC, { [GROUP_ADDED_TOPIC]: group });
+
       return group;
     },
     async deleteGroup(_, { id }) {
@@ -193,6 +201,16 @@ export const resolvers = {
           args.groupIds
               && ~args.groupIds.indexOf(payload.messageAdded.groupId)
               && args.userId !== payload.messageAdded.userId, // don't send to user creating message
+        ),
+      ),
+    },
+    groupAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(GROUP_ADDED_TOPIC),
+        (payload, args) => Boolean(
+          args.userId
+              && ~R.pluck('id', payload.groupAdded.users).indexOf(args.userId)
+              && args.userId !== payload.groupAdded.users[0].id, // don't send to user creating group
         ),
       ),
     },
