@@ -2,6 +2,9 @@ import GraphQLDate from 'graphql-date';
 import {
   BlackList, FriendInvitation, Group, Message, User,
 } from './connectors';
+import { pubsub } from '../subscriptions';
+
+const MESSAGE_ADDED_TOPIC = 'messageAdded';
 
 export const resolvers = {
   Date: GraphQLDate,
@@ -42,6 +45,10 @@ export const resolvers = {
         userId,
         text,
         groupId,
+      }).then((message) => {
+        // publish subscription notification with the whole message
+        pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
+        return message;
       });
     },
     async createGroup(
@@ -174,6 +181,12 @@ export const resolvers = {
     },
     removeFromBlackList(_, { from, to }) {
       return BlackList.destroy({ where: { fromId: from, toId: to } });
+    },
+  },
+  Subscription: {
+    messageAdded: {
+      // the subscription payload is the message.
+      subscribe: () => pubsub.asyncIterator(MESSAGE_ADDED_TOPIC),
     },
   },
   Group: {
