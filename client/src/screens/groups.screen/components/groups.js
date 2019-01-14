@@ -1,10 +1,19 @@
+import R from 'ramda';
 import React, { Component } from 'react';
+import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
 import {
   FlatList, StyleSheet, Text, View,
 } from 'react-native';
 
 import { withLoading } from 'chatty/src/components/withLoading';
+
+import { graphql } from 'react-apollo';
+import { USER_QUERY } from 'chatty/src/graphql/user.query';
+import MESSAGE_ADDED_SUBSCRIPTION from 'chatty/src/graphql/message-added.subscription';
+import GROUP_ADDED_SUBSCRIPTION from 'chatty/src/graphql/group-added.subscription';
+import { wsClient } from 'chatty/src/app';
+
 
 import Header from './header';
 import Group from './group';
@@ -20,10 +29,99 @@ const styles = StyleSheet.create({
   },
 });
 
+const userQuery = graphql(USER_QUERY, {
+  options: () => ({ variables: { id: 1 } }), // fake the user for now
+  props: ({
+    data: {
+      loading, user, refetch, subscribeToMore,
+    },
+  }) => ({
+    loading,
+    user,
+    refetch,
+    subscribeToMessages() {
+      return subscribeToMore({
+        document: MESSAGE_ADDED_SUBSCRIPTION,
+        variables: {
+          groupIds: R.pluck('id', user.groups),
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          const previousGroups = previousResult.user.groups;
+          const newMessage = subscriptionData.data.messageAdded;
+
+          const groupIndex = R.pluck('id', previousGroups).indexOf(newMessage.to.id);
+
+          const edgesLens = R.lensPath(['user', 'groups', groupIndex, 'messages', 'edges']);
+
+          return R.set(
+            edgesLens,
+            [
+              {
+                __typename: 'MessageEdge',
+                node: newMessage,
+                cursor: Buffer.from(newMessage.id.toString()).toString('base64'),
+              },
+            ],
+            previousResult,
+          );
+        },
+      });
+    },
+    subscribeToGroups() {
+      return subscribeToMore({
+        document: GROUP_ADDED_SUBSCRIPTION,
+        variables: { userId: user.id },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          const newGroup = subscriptionData.data.groupAdded;
+          const groupsLens = R.lensPath(['user', 'groups']);
+          return R.over(groupsLens, R.append(newGroup), previousResult);
+        },
+      });
+    },
+  }),
+});
+
 class Groups extends Component {
   static navigationOptions = {
     title: 'Chats',
   };
+
+  componentWillReceiveProps(nextProps) {
+    const { user } = this.props;
+    if (!nextProps.user) {
+      if (this.groupSubscription) {
+        this.groupSubscription();
+      }
+      if (this.messagesSubscription) {
+        this.messagesSubscription();
+      }
+      // clear the event subscription
+      if (this.reconnected) {
+        this.reconnected();
+      }
+    } else if (!this.reconnected) {
+      const { refetch } = this.props;
+      this.reconnected = wsClient.onReconnected(() => {
+        refetch(); // check for any data lost during disconnect
+      }, this);
+    }
+    if (
+      nextProps.user
+      && (!user || nextProps.user.groups.length !== user.groups.length)
+    ) {
+      // unsubscribe from old
+      if (typeof this.messagesSubscription === 'function') {
+        this.messagesSubscription();
+      }
+      // subscribe to new
+      if (nextProps.user.groups.length) {
+        this.messagesSubscription = nextProps.subscribeToMessages();
+      }
+    }
+    if (!this.groupSubscription && nextProps.user) {
+      this.groupSubscription = nextProps.subscribeToGroups();
+    }
+  }
 
   onRefresh = () => {
     const { refetch } = this.props;
@@ -95,8 +193,10 @@ Groups.propTypes = {
       }),
     ),
   }),
+  subscribeToMessages: PropTypes.func.isRequired,
+  subscribeToGroups: PropTypes.func.isRequired,
 };
 
-const GropusWithLoading = withLoading(Groups);
+const GropusWithLoading = withLoading(userQuery(Groups));
 
 export default GropusWithLoading;

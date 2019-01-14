@@ -1,3 +1,5 @@
+import R from 'ramda';
+import { Buffer } from 'buffer';
 import PropTypes from 'prop-types';
 import {
   FlatList, StyleSheet, Text, TouchableOpacity, View,
@@ -5,7 +7,9 @@ import {
 import React, { Component } from 'react';
 import randomColor from 'randomcolor';
 
+import { wsClient } from 'chatty/src/app';
 import Logo from 'chatty/src/components/logo';
+import MESSAGE_ADDED_SUBSCRIPTION from 'chatty/src/graphql/message-added.subscription';
 
 import Message from './message.component';
 import MessageInput from './message-input.component';
@@ -80,6 +84,43 @@ class Messages extends Component {
           newUsernameColors[user.username] = usernameColors[user.username] || randomColor();
         });
       }
+
+      // we don't resubscribe on changed props
+      // because it never happens in our app
+      if (!this.subscription) {
+        this.subscription = nextProps.subscribeToMore({
+          document: MESSAGE_ADDED_SUBSCRIPTION,
+          variables: {
+            userId: 1, // fake the user for now
+            groupIds: [nextProps.navigation.state.params.groupId],
+          },
+          updateQuery: (previousResult, { subscriptionData }) => {
+            if (!subscriptionData.data) return previousResult;
+
+            const newMessage = subscriptionData.data.messageAdded;
+
+            const edgesLens = R.lensPath(['group', 'messages', 'edges']);
+
+            return R.over(
+              edgesLens,
+              R.prepend({
+                __typename: 'MessageEdge',
+                node: newMessage,
+                cursor: Buffer.from(newMessage.id.toString()).toString('base64'),
+              }),
+              previousResult,
+            );
+          },
+        });
+      }
+
+      if (!this.reconnected) {
+        this.reconnected = wsClient.onReconnected(() => {
+          const { refetch } = this.props;
+          refetch(); // check for any data lost during disconnect
+        }, this);
+      }
+
       this.setState({
         usernameColors: newUsernameColors,
       });
@@ -178,6 +219,8 @@ Messages.propTypes = {
     users: PropTypes.array,
   }),
   loadMoreEntries: PropTypes.func,
+  subscribeToMore: PropTypes.func,
+  refetch: PropTypes.func,
 };
 
 export default Messages;
