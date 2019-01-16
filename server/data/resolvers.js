@@ -1,6 +1,6 @@
 import R from 'ramda';
 import GraphQLDate from 'graphql-date';
-import { withFilter, ForbiddenError } from 'apollo-server';
+import { withFilter } from 'apollo-server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -8,6 +8,7 @@ import {
   BlackList, FriendInvitation, Group, Message, User,
 } from './connectors';
 import { pubsub } from '../subscriptions';
+import { messageLogic } from './logic';
 
 import configurationManager from '../configurationManager';
 
@@ -45,30 +46,13 @@ export const resolvers = {
     },
   },
   Mutation: {
-    createMessage(
-      _,
-      {
-        message: { text, groupId },
-      },
-      ctx,
-    ) {
-      if (!ctx.user) {
-        throw new ForbiddenError('Unauthorized');
-      }
-      return ctx.user.then((user) => {
-        if (!user) {
-          throw new ForbiddenError('Unauthorized');
-        }
-        return Message.create({
-          userId: user.id,
-          text,
-          groupId,
-        }).then((message) => {
-          // publish subscription notification with the whole message
+    createMessage(_, args, ctx) {
+      return messageLogic.createMessage(_, args, ctx)
+        .then((message) => {
+          // Publish subscription notification with message
           pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
           return message;
         });
-      });
     },
     async createGroup(
       _,
