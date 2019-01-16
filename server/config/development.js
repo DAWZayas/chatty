@@ -13,6 +13,15 @@ const graphQL = {
   port: 8080,
 };
 
+const jwt = {
+  secret: '123abc',
+};
+
 const mock = { populating: true, force: true };
 
-export default { db, graphQL, mock };
+export default {
+  db,
+  graphQL,
+  jwt,
+  mock,
+};

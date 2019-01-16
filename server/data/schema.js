@@ -9,7 +9,6 @@ export const typeDefs = gql`
   # userId is the id of the user sending the message
   # groupId is the id of the group receiving the message
   input CreateMessageInput {
-    userId: Int!
     groupId: Int!
     text: String!
   }
@@ -70,6 +69,7 @@ export const typeDefs = gql`
     messages: [Message!]! # messages sent by user
     groups: [Group!]! # groups the user belongs to
     friends: [User!]! # user's friends/contacts
+    jwt: String # json web token for access
   }
   # a message sent from a user to a group
   type Message {
@@ -129,6 +129,9 @@ export const typeDefs = gql`
 
     addToBlackList(from: Int!, to: Int!): BlackList
     removeFromBlackList(from: Int!, to: Int!): Boolean
+
+    login(email: String!, password: String!): User
+    signup(email: String!, password: String!, username: String): User
   }
 
   type Subscription {
