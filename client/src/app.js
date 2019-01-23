@@ -13,8 +13,11 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import Config from 'react-native-config';
+import thunk from 'redux-thunk';
+import { setContext } from 'apollo-link-context';
 
 import AppWithNavigationState, { navigationReducer, navigationMiddleware } from './navigation';
+import auth from './reducers/auth.reducer';
 
 const URL = `${Config.PROTOCOL || 'http'}://${Config.SERVER || 'localhost'}:${Config.PORT || '80'}`;
 
@@ -22,9 +25,10 @@ const store = createStore(
   combineReducers({
     apollo: apolloReducer,
     nav: navigationReducer,
+    auth,
   }),
   {}, // initial state
-  composeWithDevTools(applyMiddleware(navigationMiddleware)),
+  composeWithDevTools(applyMiddleware(thunk, navigationMiddleware)),
 );
 const cache = new ReduxCache({ store });
 const reduxLink = new ReduxLink(store);
@@ -32,6 +36,20 @@ const errorLink = onError((errors) => {
   console.log(errors);
 });
 const httpLink = createHttpLink({ uri: URL });
+
+// middleware for requests
+const middlewareLink = setContext((req, previousContext) => {
+  // get the authentication token from local storage if it exists
+  const { jwt } = store.getState().auth;
+  if (jwt) {
+    return {
+      headers: {
+        authorization: `Bearer ${jwt}`,
+      },
+    };
+  }
+  return previousContext;
+});
 
 // Create WebSocket client
 export const wsClient = new SubscriptionClient(
@@ -59,7 +77,7 @@ const link = ApolloLink.from([
   reduxLink,
   errorLink,
   requestLink({
-    queryOrMutationLink: httpLink,
+    queryOrMutationLink: middlewareLink.concat(httpLink),
     subscriptionLink: webSocketLink,
   }),
 ]);

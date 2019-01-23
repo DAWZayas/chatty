@@ -6,6 +6,7 @@ import { isBefore } from 'date-fns';
 import GROUP_QUERY from 'chatty/src/graphql/group.query';
 import CREATE_MESSAGE_MUTATION from 'chatty/src/graphql/create-message.mutation';
 import { USER_QUERY } from 'chatty/src/graphql/user.query';
+import { connect } from 'react-redux';
 
 import { withLoading } from 'chatty/src/components/withLoading';
 
@@ -23,11 +24,7 @@ const groupQuery = graphql(GROUP_QUERY, {
   }),
   props: ({
     data: {
-      fetchMore,
-      loading,
-      group,
-      subscribeToMore,
-      refetch,
+      fetchMore, loading, group, subscribeToMore, refetch,
     },
   }) => ({
     loading,
@@ -67,7 +64,7 @@ const groupQuery = graphql(GROUP_QUERY, {
 });
 
 const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
-  props: ({ mutate }) => ({
+  props: ({ mutate, ownProps }) => ({
     createMessage: message => mutate({
       variables: { message },
       optimisticResponse: {
@@ -79,8 +76,8 @@ const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
           createdAt: new Date().toISOString(), // the time is now!
           from: {
             __typename: 'User',
-            id: 1, // still faking the user
-            username: 'Brook.Hudson', // still faking the user
+            id: ownProps.auth.id,
+            username: ownProps.auth.username,
           },
           to: {
             __typename: 'Group',
@@ -117,7 +114,7 @@ const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
         const userData = store.readQuery({
           query: USER_QUERY,
           variables: {
-            id: 1, // faking the user for now
+            id: ownProps.auth.id,
           },
         });
 
@@ -137,7 +134,7 @@ const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
           store.writeQuery({
             query: USER_QUERY,
             variables: {
-              id: 1, // faking the user for now
+              id: ownProps.auth.id,
             },
             data: userData,
           });
@@ -147,7 +144,12 @@ const createMessageMutation = graphql(CREATE_MESSAGE_MUTATION, {
   }),
 });
 
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
+
 export default compose(
+  connect(mapStateToProps),
   groupQuery,
   createMessageMutation,
   withLoading,

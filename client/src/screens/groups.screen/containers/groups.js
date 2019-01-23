@@ -1,17 +1,27 @@
 import React from 'react';
 
 import { Query } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import { USER_QUERY } from 'chatty/src/graphql/user.query';
 
 import { Groups } from '../components';
 
-const GroupsContainer = props => (
-  <Query query={USER_QUERY} variables={{ id: 1 }}>
-    {({ data, refetch, networkStatus }) => (
-      <Groups {...props} {...data} refetch={refetch} networkStatus={networkStatus} />
-    )}
-  </Query>
-);
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 
-export default GroupsContainer;
+const GroupsContainer = (props) => {
+  const {
+    auth: { id },
+  } = props;
+  return (
+    <Query query={USER_QUERY} variables={{ id }}>
+      {({ data, refetch, networkStatus }) => (
+        <Groups {...props} {...data} refetch={refetch} networkStatus={networkStatus} />
+      )}
+    </Query>
+  );
+};
+
+export default connect(mapStateToProps)(GroupsContainer);

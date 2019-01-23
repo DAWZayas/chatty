@@ -88,10 +88,13 @@ class Messages extends Component {
       // we don't resubscribe on changed props
       // because it never happens in our app
       if (!this.subscription) {
+        const {
+          auth: { id },
+        } = nextProps;
         this.subscription = nextProps.subscribeToMore({
           document: MESSAGE_ADDED_SUBSCRIPTION,
           variables: {
-            userId: 1, // fake the user for now
+            userId: id,
             groupIds: [nextProps.navigation.state.params.groupId],
           },
           updateQuery: (previousResult, { subscriptionData }) => {
@@ -160,7 +163,6 @@ class Messages extends Component {
     const { createMessage, navigation } = this.props;
     createMessage({
       groupId: navigation.state.params.groupId,
-      userId: 1, // faking the user for now
       text,
     }).then(() => {
       this.flatList.scrollToIndex({ index: 0, animated: true });
@@ -221,6 +223,10 @@ Messages.propTypes = {
   loadMoreEntries: PropTypes.func,
   subscribeToMore: PropTypes.func,
   refetch: PropTypes.func,
+  auth: PropTypes.shape({
+    loading: PropTypes.bool,
+    jwt: PropTypes.string,
+  }),
 };
 
 export default Messages;

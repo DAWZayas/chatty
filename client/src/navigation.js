@@ -21,6 +21,7 @@ import Messages from './screens/messages.screen';
 import NewGroup from './screens/new-group.screen';
 import FinalizeGroup from './screens/finalize-group.screen';
 import GroupDetails from './screens/group-details.screen';
+import SigninScreen from './screens/signin.screen';
 
 import { friendRoutes } from './screens/friends.screen';
 
@@ -55,7 +56,11 @@ const MainScreenNavigator = createMaterialTopTabNavigator(
     Friends: {
       screen: FriendsSwitchNavigator,
       navigationOptions: (props) => {
-        const { navigation: { state: { index, routes } } } = props;
+        const {
+          navigation: {
+            state: { index, routes },
+          },
+        } = props;
         return { title: friendRoutes[routes[index].key].title };
       },
     },
@@ -66,7 +71,7 @@ const MainScreenNavigator = createMaterialTopTabNavigator(
   },
 );
 
-const AppNavigator = createStackNavigator(
+const StackNavigator = createStackNavigator(
   {
     Main: {
       screen: MainScreenNavigator,
@@ -87,6 +92,16 @@ const AppNavigator = createStackNavigator(
   },
 );
 
+const AppNavigator = createSwitchNavigator(
+  {
+    Auth: SigninScreen,
+    App: StackNavigator,
+  },
+  {
+    initialRouteName: 'Auth',
+  },
+);
+
 // reducer initialization code
 const initialState = AppNavigator.router.getStateForAction(
   StackActions.reset({
@@ -98,7 +113,7 @@ const initialState = AppNavigator.router.getStateForAction(
     ],
   }),
 );
-export const navigationReducer = (state = initialState, action) => {
+export const navigationReducer = (state = null, action) => {
   const nextState = AppNavigator.router.getStateForAction(action, state);
   // Simply return the original `state` if `nextState` is null or undefined.
   return nextState || state;

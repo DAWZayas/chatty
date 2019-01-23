@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const userQuery = graphql(USER_QUERY, {
-  options: () => ({ variables: { id: 1 } }), // fake the user for now
+  options: ({ auth }) => ({ variables: { id: auth.id } }), // fake the user for now
   props: ({
     data: {
       loading, user, refetch, subscribeToMore,

@@ -47,12 +47,11 @@ export const resolvers = {
   },
   Mutation: {
     createMessage(_, args, ctx) {
-      return messageLogic.createMessage(_, args, ctx)
-        .then((message) => {
-          // Publish subscription notification with message
-          pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
-          return message;
-        });
+      return messageLogic.createMessage(_, args, ctx).then((message) => {
+        // Publish subscription notification with message
+        pubsub.publish(MESSAGE_ADDED_TOPIC, { [MESSAGE_ADDED_TOPIC]: message });
+        return message;
+      });
     },
     async createGroup(
       _,
