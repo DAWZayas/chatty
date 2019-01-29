@@ -14,12 +14,8 @@ import {
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
-import { graphql, compose } from 'react-apollo';
-import { connect } from 'react-redux';
-
-import { setCurrentUser } from '../actions/auth.actions';
-import LOGIN_MUTATION from '../graphql/login.mutation';
-import SIGNUP_MUTATION from '../graphql/signup.mutation';
+import { setCurrentUser } from 'chatty/src/actions/auth.actions';
+import PasswordInput from './passwordInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -81,8 +77,10 @@ class Signin extends Component {
 
     this.state = {
       view: 'login',
+      username: 'kk',
       email: 'kk@kk.es',
       password: '123',
+      passwordRepeated: '123',
     };
   }
 
@@ -91,6 +89,12 @@ class Signin extends Component {
       nextProps.navigation.goBack();
     }
   }
+
+  changeState = key => (value) => {
+    this.setState({
+      [key]: value,
+    });
+  };
 
   login = () => {
     const { email, password, view } = this.state;
@@ -133,13 +137,18 @@ class Signin extends Component {
     this.setState({
       loading: true,
     });
-    const { email, password } = this.state;
-    signup({ email, password })
+    const { email, password, username } = this.state;
+    signup({ email, password, username })
       .then(({ data: { signup: user } }) => {
         dispatch(setCurrentUser(user));
         this.setState({
           loading: false,
         });
+        dispatch(
+          NavigationActions.navigate({
+            routeName: 'App',
+          }),
+        );
       })
       .catch((error) => {
         this.setState({
@@ -160,9 +169,28 @@ class Signin extends Component {
     });
   };
 
-  render() {
-    const { view, loading } = this.state;
+  checkDisabled = () => {
+    const {
+      view, loading, email, password, passwordRepeated, username,
+    } = this.state;
+
     const jwt = R.path(['auth', 'jwt'], this.props);
+
+    if (R.isEmpty(R.trim(email)) || R.isEmpty(R.trim(password))) {
+      return true;
+    }
+
+    if (view === 'signup' && (R.isEmpty(R.trim(username)) || password !== passwordRepeated)) {
+      return true;
+    }
+
+    return loading || !!jwt;
+  };
+
+  render() {
+    const {
+      view, loading, username, email, password, passwordRepeated,
+    } = this.state;
 
     return (
       <KeyboardAvoidingView style={styles.container}>
@@ -174,25 +202,34 @@ class Signin extends Component {
           undefined
         )}
         <View style={styles.inputContainer}>
+          {view === 'signup' && (
+            <TextInput
+              defaultValue={username}
+              onChangeText={this.changeState('username')}
+              placeholder="Username"
+              style={styles.input}
+            />
+          )}
           <TextInput
-            defaultValue="kk@kk.es"
-            onChangeText={email => this.setState({ email })}
+            defaultValue={email}
+            onChangeText={this.changeState('email')}
             placeholder="Email"
             style={styles.input}
           />
-          <TextInput
-            defaultValue="123"
-            onChangeText={password => this.setState({ password })}
-            placeholder="Password"
-            secureTextEntry
-            style={styles.input}
-          />
+          <PasswordInput defaultValue={password} setPassword={this.changeState('password')} />
+          {view === 'signup' && (
+            <PasswordInput
+              placeholder="repeat password"
+              defaultValue={passwordRepeated}
+              setPassword={this.changeState('passwordRepeated')}
+            />
+          )}
         </View>
         <Button
           onPress={this[view]}
           style={styles.submit}
           title={view === 'signup' ? 'Sign up' : 'Login'}
-          disabled={loading || !!jwt}
+          disabled={this.checkDisabled()}
         />
         <View style={styles.switchContainer}>
           <Text>{view === 'signup' ? 'Already have an account?' : 'New to Chatty?'}</Text>
@@ -217,27 +254,4 @@ Signin.propTypes = {
   signup: PropTypes.func.isRequired,
 };
 
-const login = graphql(LOGIN_MUTATION, {
-  props: ({ mutate }) => ({
-    login: ({ email, password }) => mutate({
-      variables: { email, password },
-    }),
-  }),
-});
-
-const signup = graphql(SIGNUP_MUTATION, {
-  props: ({ mutate }) => ({
-    signup: ({ email, password }) => mutate({
-      variables: { email, password },
-    }),
-  }),
-});
-const mapStateToProps = ({ auth }) => ({
-  auth,
-});
-
-export default compose(
-  login,
-  signup,
-  connect(mapStateToProps),
-)(Signin);
+export default Signin;
