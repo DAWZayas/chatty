@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Settings = ({ auth: { email, username } }) => (
+const Settings = ({ auth: { email, username }, logout }) => (
   <View style={styles.container}>
     <View style={styles.row}>
       <Icon name="user" style={styles.item} />
@@ -31,7 +31,7 @@ const Settings = ({ auth: { email, username } }) => (
       <Text style={styles.item}>{email}</Text>
     </View>
     <View style={styles.row}>
-      <Button title="Logout" onPress={() => {}} />
+      <Button title="Logout" onPress={logout} />
     </View>
   </View>
 );
@@ -41,6 +41,7 @@ Settings.propTypes = {
     email: PropTypes.string,
     username: PropTypes.string,
   }),
+  logout: PropTypes.func.isRequired,
 };
 
 export default Settings;
