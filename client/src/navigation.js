@@ -41,7 +41,7 @@ const MainScreenNavigator = createMaterialTopTabNavigator(
         return { title: friendRoutes[routes[index].key].title };
       },
     },
-    Settings: { screen: Settings },
+    Settings,
   },
   {
     initialRouteName: 'Chats',

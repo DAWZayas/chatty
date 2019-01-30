@@ -106,14 +106,18 @@ class Signin extends Component {
 
     login({ email, password })
       .then(({ data: { login: user } }) => {
-        dispatch(setCurrentUser(user));
-        this.setState({
-          loading: false,
-        });
-        dispatch(
-          NavigationActions.navigate({
-            routeName: 'App',
-          }),
+        this.setState(
+          {
+            loading: false,
+          },
+          () => {
+            dispatch(setCurrentUser(user));
+            dispatch(
+              NavigationActions.navigate({
+                routeName: 'App',
+              }),
+            );
+          },
         );
       })
       .catch((error) => {

@@ -1,3 +1,8 @@
-import Signin from '../components/settings';
+import { connect } from 'react-redux';
+import Settings from '../components/settings';
 
-export default Signin({ title: 'Settings' });
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
+
+export default connect(mapStateToProps)(Settings);
