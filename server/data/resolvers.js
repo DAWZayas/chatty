@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import {
-  BlackList, FriendInvitation, Group, Message, User,
+  BlackList, FriendInvitation, Group, Message, User, UserProfile,
 } from './connectors';
 import { pubsub } from '../subscriptions';
 import { messageLogic } from './logic';
@@ -228,6 +228,13 @@ export const resolvers = {
               username: username || email,
             }))
             .then((user) => {
+              UserProfile.create({
+                userId: user.id,
+                backgroundColor: 'blue',
+              });
+              return user;
+            })
+            .then((user) => {
               const { id } = user;
               const token = jwt.sign({ id, email }, JWT_SECRET);
               ctx.user = Promise.resolve(user);
@@ -341,6 +348,11 @@ export const resolvers = {
     },
     friends(user) {
       return user.getFriends();
+    },
+    profile(user) {
+      return UserProfile.findOne({
+        where: { userId: user.id },
+      });
     },
   },
   FriendInvitation: {
