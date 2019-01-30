@@ -11,9 +11,7 @@ import {
   reduxifyNavigator,
   createReactNavigationReduxMiddleware,
 } from 'react-navigation-redux-helpers';
-import {
-  BackHandler, Text, View, StyleSheet,
-} from 'react-native';
+import { BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 
 import Groups from './screens/groups.screen';
@@ -21,31 +19,10 @@ import Messages from './screens/messages.screen';
 import NewGroup from './screens/new-group.screen';
 import FinalizeGroup from './screens/finalize-group.screen';
 import GroupDetails from './screens/group-details.screen';
-import SigninScreen from './screens/signin.screen';
+import Signin from './screens/signin.screen';
+import Settings from './screens/settings.screen';
 
 import { friendRoutes } from './screens/friends.screen';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  tabText: {
-    color: '#777',
-    fontSize: 10,
-    justifyContent: 'center',
-  },
-  selected: {
-    color: 'blue',
-  },
-});
-const TestScreen = title => () => (
-  <View style={styles.container}>
-    <Text>{title}</Text>
-  </View>
-);
 
 const FriendsSwitchNavigator = createSwitchNavigator(R.map(({ Screen }) => Screen, friendRoutes));
 
@@ -64,7 +41,7 @@ const MainScreenNavigator = createMaterialTopTabNavigator(
         return { title: friendRoutes[routes[index].key].title };
       },
     },
-    Settings: { screen: TestScreen('Settings') },
+    Settings: { screen: Settings },
   },
   {
     initialRouteName: 'Chats',
@@ -94,7 +71,7 @@ const StackNavigator = createStackNavigator(
 
 const AppNavigator = createSwitchNavigator(
   {
-    Auth: SigninScreen,
+    Auth: Signin,
     App: StackNavigator,
   },
   {
