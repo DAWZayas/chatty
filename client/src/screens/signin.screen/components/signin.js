@@ -144,11 +144,14 @@ class Signin extends Component {
         this.setState({
           loading: false,
         });
-        dispatch(
-          NavigationActions.navigate({
-            routeName: 'App',
-          }),
-        );
+        this.setState({
+          view: 'login',
+          loading: false,
+          username: user.username,
+          email: user.email,
+          password: '',
+          passwordRepeated: '',
+        });
       })
       .catch((error) => {
         this.setState({

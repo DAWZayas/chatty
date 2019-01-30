@@ -4,8 +4,8 @@ const SIGNUP_MUTATION = gql`
   mutation signup($email: String!, $password: String!, $username: String) {
     signup(email: $email, password: $password, username: $username) {
       id
-      jwt
       username
+      email
     }
   }
 `;
