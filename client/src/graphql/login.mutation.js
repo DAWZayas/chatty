@@ -6,6 +6,9 @@ const LOGIN_MUTATION = gql`
       id
       jwt
       username
+      profile {
+        color
+      }
       email
     }
   }

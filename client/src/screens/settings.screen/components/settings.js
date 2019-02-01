@@ -20,21 +20,39 @@ const styles = StyleSheet.create({
   },
 });
 
-const Settings = ({ auth: { email, username }, logout }) => (
-  <View style={styles.container}>
-    <View style={styles.row}>
-      <Icon name="user" style={styles.item} />
-      <Text style={styles.item}>{username}</Text>
+const Settings = ({ auth: { email, username, profile }, logout }) => {
+  const color = profile && profile.backgroundColor ? profile.backgroundColor : 'blue';
+  const itemStyle = {
+    ...styles.item,
+    color,
+  };
+  return (
+    <View style={styles.container}>
+      <View style={styles.row}>
+        <Icon name="user" style={itemStyle} />
+        <Text style={itemStyle}>{username}</Text>
+      </View>
+      <View style={styles.row}>
+        <Icon name="envelope" style={itemStyle} />
+        <Text style={itemStyle}>{email}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={{ ...itemStyle, alignSelf: 'center' }}>{color}</Text>
+        <View
+          style={{
+            ...itemStyle,
+            backgroundColor: color,
+            height: 50,
+            width: 50,
+          }}
+        />
+      </View>
+      <View style={styles.row}>
+        <Button title="Logout" onPress={logout} />
+      </View>
     </View>
-    <View style={styles.row}>
-      <Icon name="envelope" style={styles.item} />
-      <Text style={styles.item}>{email}</Text>
-    </View>
-    <View style={styles.row}>
-      <Button title="Logout" onPress={logout} />
-    </View>
-  </View>
-);
+  );
+};
 
 Settings.propTypes = {
   auth: PropTypes.shape({

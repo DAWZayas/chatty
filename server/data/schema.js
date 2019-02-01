@@ -63,7 +63,7 @@ export const typeDefs = gql`
   }
 
   type Profile {
-    backgroundColor: String
+    color: String
   }
 
   # a user -- keep type really simple for now

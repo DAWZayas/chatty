@@ -77,10 +77,10 @@ class Signin extends Component {
 
     this.state = {
       view: 'login',
-      username: 'kk',
-      email: 'kk@kk.es',
-      password: '123',
-      passwordRepeated: '123',
+      username: 'ustin.Leannon62',
+      email: 'Graham_Medhurst18@hotmail.com',
+      password: 'Graham_Medhurst18@hotmail.com',
+      passwordRepeated: 'Graham_Medhurst18@hotmail.com',
     };
   }
 

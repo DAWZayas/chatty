@@ -230,7 +230,7 @@ export const resolvers = {
             .then((user) => {
               UserProfile.create({
                 userId: user.id,
-                backgroundColor: 'blue',
+                color: 'blue',
               });
               return user;
             })
