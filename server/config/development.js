@@ -17,7 +17,7 @@ const jwt = {
   secret: '123abc',
 };
 
-const mock = { populating: false, force: false };
+const mock = { populating: true, force: true };
 
 export default {
   db,

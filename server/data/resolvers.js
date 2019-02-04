@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import {
-  BlackList, FriendInvitation, Group, Message, User,
+  BlackList, FriendInvitation, Group, Message, User, UserProfile,
 } from './connectors';
 import { pubsub } from '../subscriptions';
 import { messageLogic } from './logic';
@@ -215,7 +215,9 @@ export const resolvers = {
         return Promise.reject(new Error('email not found'));
       });
     },
-    signup(_, { email, password, username }, ctx) {
+    signup(_, {
+      email, password, username, color,
+    }, ctx) {
       // find user by email
       return User.findOne({ where: { email } }).then((existing) => {
         if (!existing) {
@@ -227,6 +229,16 @@ export const resolvers = {
               password: hash,
               username: username || email,
             }))
+            .then(async (user) => {
+              if (color) {
+                await UserProfile.create({
+                  userId: user.id,
+                  color,
+                });
+                return user;
+              }
+              return user;
+            })
             .then((user) => {
               const { id } = user;
               const token = jwt.sign({ id, email }, JWT_SECRET);
@@ -341,6 +353,11 @@ export const resolvers = {
     },
     friends(user) {
       return user.getFriends();
+    },
+    profile(user) {
+      return UserProfile.findOne({
+        where: { userId: user.id },
+      });
     },
   },
   FriendInvitation: {

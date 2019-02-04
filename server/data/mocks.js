@@ -43,6 +43,10 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
             username: faker.internet.userName(),
             password: hash,
           });
+          await db.models.profile.create({
+            userId: user.id,
+            color: faker.commerce.color(),
+          });
           await Promise.all(
             R.times(
               () => db.models.message.create({
@@ -70,7 +74,7 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
     ),
   );
 
-  console.log('¡DATABASE CREATED!');
+  console.log('Â¡DATABASE CREATED!');
 
   return true;
 };

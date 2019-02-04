@@ -18,6 +18,11 @@ const UserModel = db.define('user', {
   password: { type: Sequelize.STRING },
 });
 
+// define profile
+const UserProfileModel = db.define('profile', {
+  color: { type: Sequelize.STRING },
+});
+
 // define friend invitations
 const FriendInvitationModel = db.define('friendInvitation', {
   text: { type: Sequelize.STRING },
@@ -28,6 +33,7 @@ const BlackListModel = db.define('blackList', {});
 
 // users belong to multiple groups
 UserModel.belongsToMany(GroupModel, { through: 'GroupUser' });
+UserProfileModel.belongsTo(UserModel);
 // users belong to multiple users as friends
 UserModel.belongsToMany(UserModel, { through: 'Friends', as: 'friends' });
 // messages are sent from users
@@ -46,9 +52,11 @@ BlackListModel.belongsTo(UserModel, { as: 'to' });
 const Group = db.models.group;
 const Message = db.models.message;
 const User = db.models.user;
+const UserProfile = db.models.profile;
+
 const FriendInvitation = db.models.friendInvitation;
 const BlackList = db.models.blackList;
 
 export {
-  db, Group, Message, User, FriendInvitation, BlackList,
+  db, Group, Message, User, UserProfile, FriendInvitation, BlackList,
 };

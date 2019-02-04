@@ -61,6 +61,11 @@ export const typeDefs = gql`
     users: [User!]! # users in the group
     messages(messageConnection: ConnectionInput): MessageConnection # messages sent to the group
   }
+
+  type Profile {
+    color: String
+  }
+
   # a user -- keep type really simple for now
   type User {
     id: Int! # unique id for the user
@@ -70,6 +75,7 @@ export const typeDefs = gql`
     groups: [Group!]! # groups the user belongs to
     friends: [User!]! # user's friends/contacts
     jwt: String # json web token for access
+    profile: Profile
   }
   # a message sent from a user to a group
   type Message {
@@ -131,7 +137,7 @@ export const typeDefs = gql`
     removeFromBlackList(from: Int!, to: Int!): Boolean
 
     login(email: String!, password: String!): User
-    signup(email: String!, password: String!, username: String): User
+    signup(email: String!, password: String!, username: String, color: String): User
   }
 
   type Subscription {
