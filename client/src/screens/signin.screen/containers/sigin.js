@@ -16,8 +16,15 @@ const login = graphql(LOGIN_MUTATION, {
 
 const signup = graphql(SIGNUP_MUTATION, {
   props: ({ mutate }) => ({
-    signup: ({ username, email, password }) => mutate({
-      variables: { username, email, password },
+    signup: ({
+      username, email, password, color,
+    }) => mutate({
+      variables: {
+        username,
+        email,
+        password,
+        color,
+      },
     }),
   }),
 });

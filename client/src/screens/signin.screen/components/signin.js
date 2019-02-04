@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+import Color from 'color';
 
 import { setCurrentUser } from 'chatty/src/actions/auth.actions';
 import PasswordInput from './passwordInput';
@@ -81,6 +82,7 @@ class Signin extends Component {
       email: 'Graham_Medhurst18@hotmail.com',
       password: 'Graham_Medhurst18@hotmail.com',
       passwordRepeated: 'Graham_Medhurst18@hotmail.com',
+      color: 'blue',
     };
   }
 
@@ -141,8 +143,12 @@ class Signin extends Component {
     this.setState({
       loading: true,
     });
-    const { email, password, username } = this.state;
-    signup({ email, password, username })
+    const {
+      email, password, username, color,
+    } = this.state;
+    signup({
+      email, password, username, color,
+    })
       .then(({ data: { signup: user } }) => {
         dispatch(setCurrentUser(user));
         this.setState({
@@ -196,8 +202,18 @@ class Signin extends Component {
 
   render() {
     const {
-      view, loading, username, email, password, passwordRepeated,
+      view, loading, username, email, password, passwordRepeated, color,
     } = this.state;
+
+    let backgroundColor = null;
+    let foregroundColor = null;
+    try {
+      backgroundColor = new Color(color);
+      foregroundColor = backgroundColor.negate();
+    } catch {
+      backgroundColor = 'rgba(0, 0, 0, 0.2)';
+      foregroundColor = 'black';
+    }
 
     return (
       <KeyboardAvoidingView style={styles.container}>
@@ -225,11 +241,19 @@ class Signin extends Component {
           />
           <PasswordInput defaultValue={password} setPassword={this.changeState('password')} />
           {view === 'signup' && (
-            <PasswordInput
-              placeholder="repeat password"
-              defaultValue={passwordRepeated}
-              setPassword={this.changeState('passwordRepeated')}
-            />
+            <View>
+              <PasswordInput
+                placeholder="repeat password"
+                defaultValue={passwordRepeated}
+                setPassword={this.changeState('passwordRepeated')}
+              />
+              <TextInput
+                defaultValue={color}
+                onChangeText={this.changeState('color')}
+                placeholder="Color"
+                style={[styles.input, { backgroundColor, color: foregroundColor }]}
+              />
+            </View>
           )}
         </View>
         <Button

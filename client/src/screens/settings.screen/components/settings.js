@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 });
 
 const Settings = ({ auth: { email, username, profile }, logout }) => {
-  const color = profile && profile.backgroundColor ? profile.backgroundColor : 'blue';
+  const color = profile && profile.color ? profile.color : 'blue';
   const itemStyle = {
     ...styles.item,
     color,
