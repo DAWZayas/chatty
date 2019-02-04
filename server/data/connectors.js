@@ -20,7 +20,7 @@ const UserModel = db.define('user', {
 
 // define profile
 const UserProfileModel = db.define('profile', {
-  backgroundColor: { type: Sequelize.STRING },
+  color: { type: Sequelize.STRING },
 });
 
 // define friend invitations

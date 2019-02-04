@@ -215,7 +215,9 @@ export const resolvers = {
         return Promise.reject(new Error('email not found'));
       });
     },
-    signup(_, { email, password, username }, ctx) {
+    signup(_, {
+      email, password, username, color,
+    }, ctx) {
       // find user by email
       return User.findOne({ where: { email } }).then((existing) => {
         if (!existing) {
@@ -227,11 +229,14 @@ export const resolvers = {
               password: hash,
               username: username || email,
             }))
-            .then((user) => {
-              UserProfile.create({
-                userId: user.id,
-                color: 'blue',
-              });
+            .then(async (user) => {
+              if (color) {
+                await UserProfile.create({
+                  userId: user.id,
+                  color,
+                });
+                return user;
+              }
               return user;
             })
             .then((user) => {

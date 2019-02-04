@@ -137,7 +137,7 @@ export const typeDefs = gql`
     removeFromBlackList(from: Int!, to: Int!): Boolean
 
     login(email: String!, password: String!): User
-    signup(email: String!, password: String!, username: String): User
+    signup(email: String!, password: String!, username: String, color: String): User
   }
 
   type Subscription {
