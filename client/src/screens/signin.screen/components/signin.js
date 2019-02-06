@@ -147,7 +147,10 @@ class Signin extends Component {
       email, password, username, color,
     } = this.state;
     signup({
-      email, password, username, color,
+      email,
+      password,
+      username,
+      color,
     })
       .then(({ data: { signup: user } }) => {
         dispatch(setCurrentUser(user));
@@ -184,8 +187,15 @@ class Signin extends Component {
 
   checkDisabled = () => {
     const {
-      view, loading, email, password, passwordRepeated, username,
+      view, loading, email, password, passwordRepeated, username, color,
     } = this.state;
+
+    let validColor = true;
+    try {
+      color && new Color(color);
+    } catch {
+      validColor = false;
+    }
 
     const jwt = R.path(['auth', 'jwt'], this.props);
 
@@ -193,7 +203,10 @@ class Signin extends Component {
       return true;
     }
 
-    if (view === 'signup' && (R.isEmpty(R.trim(username)) || password !== passwordRepeated)) {
+    if (
+      view === 'signup'
+      && (R.isEmpty(R.trim(username)) || password !== passwordRepeated || !validColor)
+    ) {
       return true;
     }
 
