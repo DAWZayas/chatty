@@ -81,8 +81,8 @@ class Signin extends Component {
 
     this.state = {
       view: 'login',
-      email: 'kk@kk.es',
-      password: '123',
+      email: 'Hallie.Paucek@hotmail.com',
+      password: 'Hallie.Paucek@hotmail.com',
     };
   }
 
@@ -161,7 +161,9 @@ class Signin extends Component {
   };
 
   render() {
-    const { view, loading } = this.state;
+    const {
+      view, loading, email, password,
+    } = this.state;
     const jwt = R.path(['auth', 'jwt'], this.props);
 
     return (
@@ -175,14 +177,14 @@ class Signin extends Component {
         )}
         <View style={styles.inputContainer}>
           <TextInput
-            defaultValue="kk@kk.es"
-            onChangeText={email => this.setState({ email })}
+            defaultValue={email}
+            onChangeText={newEmail => this.setState({ email: newEmail })}
             placeholder="Email"
             style={styles.input}
           />
           <TextInput
-            defaultValue="123"
-            onChangeText={password => this.setState({ password })}
+            defaultValue={password}
+            onChangeText={newPassword => this.setState({ password: newPassword })}
             placeholder="Password"
             secureTextEntry
             style={styles.input}
