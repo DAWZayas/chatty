@@ -7,7 +7,7 @@
     "start-emulator": "$ANDROID_HOME/emulator/emulator @Nexus_6_API_27",
     "test": "jest",
     "build": "cd android && ENVFILE=.env.prod ./gradlew assembleRelease && cd ..",
-    "install": "adb install -r android/app/build/outputs/apk/release/app-release.apk"
+    "deploy": "adb install -r android/app/build/outputs/apk/release/app-release.apk"
   },
   "dependencies": {
     "apollo-cache-redux": "^0.1.2",
