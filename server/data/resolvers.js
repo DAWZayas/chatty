@@ -8,7 +8,7 @@ import {
   BlackList, FriendInvitation, Group, Message, User, UserProfile,
 } from './connectors';
 import { pubsub } from '../subscriptions';
-import { messageLogic } from './logic';
+import { messageLogic, profileLogic } from './logic';
 
 import configurationManager from '../configurationManager';
 
@@ -46,6 +46,9 @@ export const resolvers = {
     },
   },
   Mutation: {
+    updateProfile(_, args, ctx) {
+      return profileLogic.updateProfile(_, args, ctx);
+    },
     createMessage(_, args, ctx) {
       return messageLogic.createMessage(_, args, ctx).then((message) => {
         // Publish subscription notification with message

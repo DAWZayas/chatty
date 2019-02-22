@@ -45,7 +45,7 @@ const mockDB = async ({ populating = true, force = true } = {}) => {
           });
           await db.models.profile.create({
             userId: user.id,
-            color: faker.commerce.color(),
+            color: faker.internet.color(),
           });
           await Promise.all(
             R.times(

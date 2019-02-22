@@ -1,5 +1,5 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server';
-import { Message } from './connectors';
+import { Message, UserProfile } from './connectors';
 // reusable function to check for a user with context
 function getAuthenticatedUser(ctx) {
   return ctx.user.then((user) => {
@@ -28,6 +28,23 @@ export const messageLogic = {
       }
       throw new ForbiddenError('Unauthorized');
     }));
+  },
+};
+
+export const profileLogic = {
+  updateProfile(
+    _,
+    {
+      profile: { color },
+    },
+    ctx,
+  ) {
+    return getAuthenticatedUser(ctx).then((user) => {
+      if (user) {
+        return UserProfile.findOne({ where: { userId: user.id } }).then(profile => profile.update({ color }));
+      }
+      throw new ForbiddenError('Unauthorized');
+    });
   },
 };
 

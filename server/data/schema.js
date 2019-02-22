@@ -26,6 +26,11 @@ export const typeDefs = gql`
     name: String
   }
 
+  # input for updating profile
+  input UpdateProfileInput {
+    color: String
+  }
+
   # input for creating friend invitations
   input CreateFriendInvitationInput {
     from: Int! # user id of the user who sends invitation
@@ -138,6 +143,7 @@ export const typeDefs = gql`
 
     login(email: String!, password: String!): User
     signup(email: String!, password: String!, username: String, color: String): User
+    updateProfile(profile: UpdateProfileInput!): Profile
   }
 
   type Subscription {
